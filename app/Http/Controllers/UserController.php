@@ -13,6 +13,11 @@ use App\Models\SheetObject;
 use App\Models\MasterObjectItem;
 use App\Models\PreparatoryScope;
 use App\Models\PreparatoryItemHistory;
+use App\Models\MasterKavachSection;
+use App\Models\GkSectionData;
+use App\Models\TowerSectionData;
+use App\Models\OfcSectionData;
+
 class UserController extends Controller
 {
     public function showLoginForm()
@@ -83,27 +88,254 @@ public function store_new_project(Request $request)
 }
 
 
+
 public function object_details($id)
 {
+    // Objects + unke items
+    $objects = SheetObject::all();
 
-    // dd($id);
-    // Sheet ke objects laa rahe hai
-    $objects = SheetObject::all(); // ✅ yaha get() hata diya
-
-    // Har object ke andar ke items nikaalna
     $data = [];
+    $allItemIds = [];
+
     foreach ($objects as $object) {
         $items = MasterObjectItem::where('object_id', $object->id)->get();
 
         $data[] = [
             'object_name' => $object->object_name,
-            'items'       => $items
+            'items'       => $items,
         ];
+
+        // later mapping ke liye item ids collect
+        foreach ($items as $it) {
+            $allItemIds[] = $it->id;
+        }
     }
 
-    // Data blade ko bhejna
-    return view('object_details', compact('data','id'));
+    // Is project ke pehle se saved rows (keyed by item_id)
+    $existing = PreparatoryScope::where('new_project_id', $id)
+                ->whereIn('item_id', $allItemIds)
+                ->get()
+                ->keyBy('item_id');
+
+    // Requirement: pehli submit ke baad pura form lock
+    $isLocked = $existing->isNotEmpty();
+
+    return view('object_details', compact('data', 'id', 'existing', 'isLocked'));
 }
+
+
+
+
+
+
+
+public function section_target_details($id)
+{
+    $sections = MasterKavachSection::all();
+    $data = GkSectionData::with('section')->get();
+    $towerdata = TowerSectionData::with('section')->get();
+    $ofcdata = OfcSectionData::with('section')->get();
+
+
+    return view('section_target_details', compact('sections','data','id','towerdata','ofcdata'));
+}
+
+
+
+
+   public function gk_section_store(Request $request)
+{
+    $request->validate([
+        'new_project_id'  => 'required|integer',
+        'section_id'      => 'required|integer',
+        'rkm'             => 'required|integer',
+        'rfid_scope'      => 'required|integer',
+        'se_stn_scope'    => 'required|integer',
+        'se_hut_scope'    => 'required|integer',
+        'fat_stn_scope'   => 'required|integer',
+        'fat_hut_scope'   => 'required|integer',
+        'sat_stn_scope'   => 'required|integer',
+        'sat_hut_scope'   => 'required|integer',
+        'idd_stn_scope'   => 'required|integer',
+        'idd_hut_scope'   => 'required|integer',
+    ]);
+
+    GkSectionData::create([
+        'new_project_id'  => $request->new_project_id,
+        'section_id'      => $request->section_id,
+        'rkm'             => $request->rkm,
+        
+        // RFID
+        'rfid_scope'      => $request->rfid_scope,
+        'rfid_comp'       => 0,
+
+        // SE
+        'se_stn_scope'    => $request->se_stn_scope,
+        'se_stn_comp'     => 0,
+        'se_hut_scope'    => $request->se_hut_scope,
+        'se_hut_comp'     => 0,
+
+        // FAT
+        'fat_stn_scope'   => $request->fat_stn_scope,
+        'fat_stn_comp'    => 0,
+        'fat_hut_scope'   => $request->fat_hut_scope,
+        'fat_hut_comp'    => 0,
+
+        // SAT
+        'sat_stn_scope'   => $request->sat_stn_scope,
+        'sat_stn_comp'    => 0,
+        'sat_hut_scope'   => $request->sat_hut_scope,
+        'sat_hut_comp'    => 0,
+
+        // IDD
+        'idd_stn_scope'   => $request->idd_stn_scope,
+        'idd_stn_comp'    => 0,
+        'idd_hut_scope'   => $request->idd_hut_scope,
+        'idd_hut_comp'    => 0,
+    ]);
+
+    return redirect()->back()->with('success', 'Section Data Saved Successfully!');
+}
+
+
+
+
+
+
+ public function tower_section_store(Request $request)
+{
+    $request->validate([
+        'new_project_id'  => 'required|integer',
+        'section_id'      => 'required|integer',
+        'rkm'             => 'required|integer',
+        'tower_foundation_stn_scope'      => 'required|integer',
+        'tower_erection_stn_scope'    => 'required|integer',
+        'tower_foundation_scope'   => 'required|integer',
+        'tower_erection_scope'   => 'required|integer',
+    ]);
+
+    TowerSectionData::create([
+        'new_project_id'  => $request->new_project_id,
+        'section_id'      => $request->section_id,
+        'rkm'             => $request->rkm,
+        
+        // RFID
+        'tower_foundation_stn_scope'      => $request->tower_foundation_stn_scope,
+        'tower_foundation_stn_comp'       => 0,
+
+        // SE
+        'tower_erection_stn_scope'    => $request->tower_erection_stn_scope,
+        'tower_erection_stn_comp'     => 0,
+        'tower_foundation_scope'    => $request->tower_foundation_scope,
+        'tower_foundation_comp'     => 0,
+
+        // FAT
+        'tower_erection_scope'   => $request->tower_erection_scope,
+        'tower_erection_comp'    => 0,
+        
+    ]);
+
+    return redirect()->back()->with('success', 'Tower Section Data Saved Successfully!');
+}
+
+
+
+
+
+
+public function update_section_gk(Request $request, $id)
+{
+    $section = GkSectionData::findOrFail($id);
+
+    $section->update([
+        'rfid_comp'     => $request->rfid_comp,
+        'se_stn_comp'   => $request->se_stn_comp,
+        'se_hut_comp'   => $request->se_hut_comp,
+        'fat_stn_comp'  => $request->fat_stn_comp,
+        'fat_hut_comp'  => $request->fat_hut_comp,
+        'sat_stn_comp'  => $request->sat_stn_comp,
+        'sat_hut_comp'  => $request->sat_hut_comp,
+        'idd_stn_comp'  => $request->idd_stn_comp,
+        'idd_hut_comp'  => $request->idd_hut_comp,
+    ]);
+
+    return redirect()->back()->with('success', 'Data updated successfully!');
+}
+
+
+
+
+
+
+public function tower_update_section(Request $request, $id)
+{
+    $section = TowerSectionData::findOrFail($id);
+
+    $section->update([
+        'tower_foundation_stn_comp'     => $request->tower_foundation_stn_comp,
+        'tower_erection_stn_comp'   => $request->tower_erection_stn_comp,
+        'tower_foundation_comp'   => $request->tower_foundation_comp,
+        'tower_erection_comp'  => $request->tower_erection_comp,
+    ]);
+
+    return redirect()->back()->with('success', 'Tower Data updated successfully!');
+}
+
+
+
+
+
+
+
+
+ public function ofc_section_store(Request $request)
+{
+    $request->validate([
+        'new_project_id'  => 'required|integer',
+        'section_id'      => 'required|integer',
+        'rkm'             => 'required|integer',
+        'ofc_duct_scope'    => 'required|integer',
+        'ofc_lay_scope'   => 'required|integer',
+        'outdoor_design_scope'   => 'required|integer',
+    ]);
+
+    OfcSectionData::create([
+        'new_project_id'  => $request->new_project_id,
+        'section_id'      => $request->section_id,
+        'rkm'             => $request->rkm,
+        
+        // RFID
+        'ofc_duct_scope'      => $request->ofc_duct_scope,
+        'ofc_duct_comp'       => 0,
+
+        // SE
+        'ofc_lay_scope'    => $request->ofc_lay_scope,
+        'ofc_lay_comp'     => 0,
+        'outdoor_design_scope'    => $request->outdoor_design_scope,
+        'outdoor_design_comp'     => 0,
+
+        
+        
+    ]);
+
+    return redirect()->back()->with('success', 'OFC Section Data Saved Successfully!');
+}
+
+
+public function ofc_update_section(Request $request, $id)
+{
+    $section = OfcSectionData::findOrFail($id);
+
+    $section->update([
+        'ofc_duct_comp'     => $request->ofc_duct_comp,
+        'ofc_lay_comp'   => $request->ofc_lay_comp,
+        'outdoor_design_comp'   => $request->outdoor_design_comp,
+    ]);
+
+    return redirect()->back()->with('success', 'OFC Data updated successfully!');
+}
+
+
 
 
 
@@ -115,19 +347,62 @@ public function object_details($id)
 
 public function savePreparatoryScope(Request $request)
 {
-    // Multiple items ek sath store karne ke liye loop
-    foreach ($request->items as $item) {
-        PreparatoryScope::create([
-            'new_project_id' => $request->new_project_id,
-            'item_id'        => $item['item_id'],
-            'scope'          => $item['scope'],
-            'description'    => $item['description'],
-            'progress'       => 0, // default rakha
-        ]);
+    // 1) Validate input
+    $data = $request->validate([
+        'new_project_id'          => ['required','integer','exists:new_project,id'],
+        'items'                   => ['required','array','min:1'],
+        'items.*.item_id'         => ['required','integer','exists:master_object_item,id'],
+        'items.*.scope'           => ['nullable','numeric'],   // ya ['required','numeric'] if needed
+        'items.*.description'     => ['nullable','string'],
+    ]);
+
+    $projectId = (int) $data['new_project_id'];
+
+    // 2) One-time guard: agar pehle se kuch save hai to block
+    if (PreparatoryScope::where('new_project_id', $projectId)->exists()) {
+        return redirect()
+            ->route('object_details', $projectId)
+            ->with('info', 'This project is already saved once.');
     }
 
-    return redirect()->back()->with('success', 'Data saved successfully!');
+    // 3) Rows build (empty lines skip) + batch insert
+    $rows = [];
+    $now  = now();
+
+    foreach ($data['items'] as $row) {
+        $desc  = $row['description'] ?? '';
+        $scope = $row['scope'] ?? null;
+
+        // khali line skip: na description, na scope
+        if (($desc === null || $desc === '') && ($scope === null || $scope === '')) {
+            continue;
+        }
+
+        $rows[] = [
+            'new_project_id' => $projectId,
+            'item_id'        => (int) $row['item_id'],
+            'description'    => $desc ?? '',
+            'scope'          => $scope === '' ? 0 : (float) $scope,
+            'progress'       => 0,
+            'created_at'     => $now,
+            'updated_at'     => $now,
+        ];
+    }
+
+    if (empty($rows)) {
+        return back()->with('warning', 'Nothing to save. Please fill at least one row.');
+    }
+
+    DB::transaction(function () use ($rows) {
+        PreparatoryScope::insert($rows); // fast bulk insert
+    });
+
+    // 4) Redirect back to details page -> wahan $isLocked true ho jayega (save button hide + fields disabled)
+    return redirect()
+        ->route('object_details', $projectId)
+        ->with('success', 'Data saved successfully!');
 }
+
 
 
 public function user_details()
