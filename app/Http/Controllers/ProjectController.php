@@ -54,40 +54,60 @@ class ProjectController extends Controller
     }
     public function history($id)
     {
-    $project = \App\Models\Project::with(['histories.user'])->findOrFail($id);
+    $project = \App\Models\Project::with(['station', 'planHead', 'agency','histories.user'])->findOrFail($id);
     $histories = $project->histories()->latest('changed_at')->get();
 
-    // Return rendered partial HTML for modal body
+    // Fetch all lookup data
+    $stations  = \App\Models\Station::pluck('name', 'id')->toArray();
+    $planHeads = \App\Models\PlanHead::pluck('code', 'id')->toArray();
+    $agencies  = \App\Models\Agency::pluck('name', 'id')->toArray();
+
+    // Replace IDs with names inside snapshot
+    $histories->transform(function ($history) use ($stations, $planHeads, $agencies) {
+    $snapshot = json_decode($history->snapshot_json, true);
+
+    if (isset($snapshot['station_id'])) {
+    $snapshot['station'] = $stations[$snapshot['station_id']] ?? $snapshot['station_id'];
+    }
+    if (isset($snapshot['ph_id'])) {
+    $snapshot['plan_head'] = $planHeads[$snapshot['ph_id']] ?? $snapshot['ph_id'];
+    }
+    if (isset($snapshot['agency_id'])) {
+    $snapshot['agency'] = $agencies[$snapshot['agency_id']] ?? $snapshot['agency_id'];
+    }
+
+    $history->snapshot_array = $snapshot; // attach for blade
+    return $history;
+    });
+
     $html = view('history', compact('project', 'histories'))->render();
 
     return response()->json(['success' => true, 'html' => $html]);
     }
-        public function updateField(Request $request)
-        {
-        $request->validate([
-        'id'    => 'required|exists:projects,id',
-        'field' => 'required|string',
-        'value' => 'nullable'
-        ]);
+    public function updateField(Request $request)
+    {
+        $project = Project::findOrFail($request->id);
 
-        $project = \App\Models\Project::findOrFail($request->id);
+        // Loop through only the fields you allow
+        $allowed = [
+        'tender_status','esp_status','sip_status',
+        'crs_status','building_status',
+        'indoor_progress_pct','outdoor_progress_pct','tds_target'
+        ];
 
-        // update field dynamically
-        $project->{$request->field} = $request->value;
+        foreach ($allowed as $field) {
+        if ($request->has($field)) {
+        $project->{$field} = $request->$field;
+        }
+        }
+
         $project->save();
-
-        // optional: log to history
-/*        \App\Models\ProjectHistory::create([
-        'project_id'   => $project->id,
-        'snapshot_json'=> json_encode($project->toArray()),
-        'changed_by'   => auth()->id(),
-        'changed_at'   => now(),
-        ]);*/
 
         return response()->json([
         'success' => true,
-        'id'      => $project->id, // 👈 send back row id
-        'message' => ucfirst(str_replace('_', ' ', $request->field)) . ' updated successfully!'
+        'id' => $project->id,
+        'message' => 'Project updated successfully!'
         ]);
-        }
+    }
+
 }
