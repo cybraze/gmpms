@@ -8,6 +8,7 @@ use App\Models\ObubState;
 use App\Models\ObubDistrict;
 use App\Models\ObubMajorSection;
 use App\Models\Agency;
+use Illuminate\Support\Facades\DB;
 
 class ObubController extends Controller
 {
@@ -21,15 +22,15 @@ class ObubController extends Controller
         $districts     = ObubDistrict::orderBy('name')->get(); // front-end pe filter kar lenge
         $majorSections = ObubMajorSection::orderBy('name')->get();
         $agencies      = Agency::orderBy('name')->get();
-
+        $divisions = DB::table('divisions')->orderBy('code')->get(['id','code']);
         // aapka view name:
-        return view('ob_ou', compact('rows','states','districts','majorSections','agencies'));
+        return view('ob_ou', compact('rows','states','districts','majorSections','agencies','divisions'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'div_id'            => 'required|string|max:2',
+            'div_id'            => 'required|string|max:10|exists:divisions,code',
             'lc_no'             => 'nullable|string|max:50',
             'local_name'        => 'nullable|string|max:150',
             'state_id'          => 'required|exists:obub_states,id',

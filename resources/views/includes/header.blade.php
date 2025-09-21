@@ -598,6 +598,7 @@ border-color: #083785;" id="btnNavbarSearch" type="submit"><i class="fas fa-sear
        <a class="nav-link" href="">Training</a>
         <a class="nav-link" href="">Loco</a>
         <a class="nav-link" href="{{route('ei_works')}}">EI Works</a>
+        <a class="nav-link" href="{{route('auto_signal_project')}}">Auto Signalling</a>
     </nav>
     </div>
    

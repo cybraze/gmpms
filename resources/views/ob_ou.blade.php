@@ -269,9 +269,15 @@ thead{color:#000 !important;text-shadow:none !important;background:#bbcde5 !impo
         <div class="modal-body p-4">
           <div class="row g-3">
             <div class="col-md-2">
-              <label class="form-label fw-semibold">Div.</label>
-              <input type="text" name="div_id" class="form-control border-primary" maxlength="2" required>
-            </div>
+  <label class="form-label fw-semibold">Div.</label>
+  <select name="div_id" id="div_id" class="form-select border-primary" required>
+    <option value="">-- Select Div --</option>
+    @foreach($divisions as $d)
+      <option value="{{ $d->code }}">{{ $d->code }}</option>
+    @endforeach
+  </select>
+</div>
+
 
             <div class="col-md-3">
               <label class="form-label fw-semibold">LC No.</label>

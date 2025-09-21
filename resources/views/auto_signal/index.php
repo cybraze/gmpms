@@ -196,9 +196,11 @@ Add Project
 <thead class="table-header">
 <tr>
 <th>#</th>
-    <th style="text-align: left;">Station</th>
-    <th style="text-align: left;">PH</th>
-    <th style="text-align: left;">Type</th>
+    <th style="text-align: left;">Division</th>
+    <th style="text-align: left;">Section</th>
+    <th>Target(RKM)</th>
+    <th>Completed(RKM)</th>
+    <th>Balance(RKM)</th>
     <th>Tender</th>
     <th>ESP</th>
     <th>SIP</th>
