@@ -304,7 +304,11 @@ canvas {
                 <td>
                     <button type="submit" class="btn btn-success btn-sm px-3 shadow-sm">Update</button>
                 </td>
-                <td class="text-muted small">{{ $row->updated_at?->format('Y-m-d') }}</td>
+                <td class="text-muted small">
+     <a type="button" class=" view-history" data-id="{{ $row->id }}">
+             {{ $row->updated_at?->format('d-m-Y') }}
+      </a>
+                </td>
             </tr>
         </form>
         @endforeach
@@ -318,9 +322,114 @@ canvas {
 
 </div>
 
+<style>
+  .history-modal-body {
+      max-height: 75vh;       /* vertical size */
+      overflow-y: auto;
+      overflow-x: auto;       /* horizontal scroll */
+  }
+  .history-table thead th {
+      position: sticky;
+      top: 0;
+      /* background: #0d6efd; */
+      /* color: white; */
+      z-index: 2;
+      text-align: center;
+      font-size: 13px;
+      white-space: nowrap;
+  }
+  .history-table td {
+      white-space: nowrap;
+      font-size: 13px;
+      text-align: center;
+  }
+</style>
 
 
+<div class="modal fade" id="historyModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered"> <!-- 👈 bada modal -->
+    <div class="modal-content">
+      <div class="modal-header  text-white" style="background: linear-gradient(to right, #5780bf, #5780bf);">
+        <h5 class="modal-title">Ground Kavach Section History</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body history-modal-body">
+        <table class="table table-bordered table-striped table-sm history-table">
+          <thead id="historyTableHead"></thead>
+          <tbody id="historyTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 
+
+<script>
+    var sectionsMap = @json($sectionsMap);
+</script>
+
+<script>
+$(document).on("click", ".view-history", function () {
+    var sectionId = $(this).data("id");
+
+    $.get("{{ url('/section/history') }}/" + sectionId, function (data) {
+        var header = `
+          <tr class="" style="background: #ddebff;color:black;">
+            <th>#</th>
+            
+            <th>Section</th>
+            <th>RKM</th>
+            <th>RFID Scope</th><th>RFID Comp</th>
+            <th>SE Stn Scope</th><th>SE Stn Comp</th>
+            <th>SE Hut Scope</th><th>SE Hut Comp</th>
+            <th>FAT Stn Scope</th><th>FAT Stn Comp</th>
+            <th>FAT Hut Scope</th><th>FAT Hut Comp</th>
+            <th>SAT Stn Scope</th><th>SAT Stn Comp</th>
+            <th>SAT Hut Scope</th><th>SAT Hut Comp</th>
+            <th>IDD Stn Scope</th><th>IDD Stn Comp</th>
+            <th>IDD Hut Scope</th><th>IDD Hut Comp</th>
+            <th>Changed By</th>
+            <th>Changed At</th>
+          </tr>
+        `;
+
+        var rows = "";
+        data.forEach(function (item, index) {
+            let s = JSON.parse(item.snapshot_json);
+
+            // 👇 Replace section_id with section_name
+            let sectionName = "";
+            if (s.section_id) {
+                sectionName = sectionsMap[s.section_id] ?? s.section_id;
+            }
+
+            rows += `
+              <tr>
+                <td>${index + 1}</td>
+                
+                <td>${sectionName}</td>
+                <td>${s.rkm}</td>
+                <td>${s.rfid_scope}</td><td>${s.rfid_comp}</td>
+                <td>${s.se_stn_scope}</td><td>${s.se_stn_comp}</td>
+                <td>${s.se_hut_scope}</td><td>${s.se_hut_comp}</td>
+                <td>${s.fat_stn_scope}</td><td>${s.fat_stn_comp}</td>
+                <td>${s.fat_hut_scope}</td><td>${s.fat_hut_comp}</td>
+                <td>${s.sat_stn_scope}</td><td>${s.sat_stn_comp}</td>
+                <td>${s.sat_hut_scope}</td><td>${s.sat_hut_comp}</td>
+                <td>${s.idd_stn_scope}</td><td>${s.idd_stn_comp}</td>
+                <td>${s.idd_hut_scope}</td><td>${s.idd_hut_comp}</td>
+                 <td>${item.changed_by}</td>
+                <td>${item.changed_at}</td>
+              </tr>
+            `;
+        });
+
+        $("#historyTableBody").html(header + rows);
+        $("#historyModal").modal("show");
+    });
+});
+
+</script>
 
 
   
@@ -369,19 +478,19 @@ canvas {
 
             <!-- SE STN Scope -->
             <div class="col-md-6">
-              <label class="form-label">SE STN Scope</label>
+              <label class="form-label">Stationary Equipments Stations Scope</label>
               <input type="number" class="form-control" name="se_stn_scope" required>
             </div>
 
             <!-- SE HUT Scope -->
             <div class="col-md-6">
-              <label class="form-label">SE HUT Scope</label>
+              <label class="form-label">Stationary Equipments HUT Scope</label>
               <input type="number" class="form-control" name="se_hut_scope" required>
             </div>
 
             <!-- FAT STN Scope -->
             <div class="col-md-6">
-              <label class="form-label">FAT STN Scope</label>
+              <label class="form-label">FAT Stations Scope</label>
               <input type="number" class="form-control" name="fat_stn_scope" required>
             </div>
 
@@ -393,7 +502,7 @@ canvas {
 
             <!-- SAT STN Scope -->
             <div class="col-md-6">
-              <label class="form-label">SAT STN Scope</label>
+              <label class="form-label">SAT Stations Scope</label>
               <input type="number" class="form-control" name="sat_stn_scope" required>
             </div>
 
@@ -405,13 +514,13 @@ canvas {
 
             <!-- IDD STN Scope -->
             <div class="col-md-6">
-              <label class="form-label">IDD STN Scope</label>
+              <label class="form-label">Indoor Design Documents Stations Scope</label>
               <input type="number" class="form-control" name="idd_stn_scope" required>
             </div>
 
             <!-- IDD HUT Scope -->
             <div class="col-md-6">
-              <label class="form-label">IDD HUT Scope</label>
+              <label class="form-label">Indoor Design Documents HUT Scope</label>
               <input type="number" class="form-control" name="idd_hut_scope" required>
             </div>
 
@@ -464,7 +573,7 @@ canvas {
             <th class="text-start">Section</th>
             <th class="text-start">RKM</th>
             <th colspan="3">Tower Foundations (Stations)</th>
-            <th colspan="3">"Tower Erections (Stations)</th>
+            <th colspan="3">Tower Erections (Stations)</th>
             <th colspan="3">Tower Foundations (Sections)</th>
             <th colspan="3">Tower Erections (Sections)</th>
             
@@ -520,7 +629,17 @@ canvas {
                 <td>
                     <button type="submit" class="btn btn-success btn-sm px-3 shadow-sm">Update</button>
                 </td>
-                <td class="text-muted small">{{ $rowtwo->updated_at?->format('Y-m-d') }}</td>
+                <td class="text-muted small">
+
+                
+<a type="button" 
+        class="view-tower-history" 
+        data-id="{{ $rowtwo->id }}">
+  {{ $rowtwo->updated_at?->format('d-m-Y') }}
+</a>
+
+
+                </td>
             </tr>
         </form>
         @endforeach
@@ -538,9 +657,73 @@ canvas {
 
 
 
+<div class="modal fade" id="towerHistoryModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header text-white" style="background: linear-gradient(to right, #5780bf, #5780bf);">
+        <h5 class="modal-title">Tower Section History</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body history-modal-body">
+        <table class="table table-bordered table-striped table-sm history-table">
+          <thead id="towerHistoryTableHead"></thead>
+          <tbody id="towerHistoryTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 
 
+<script>
+$(document).on("click", ".view-tower-history", function () {
+    var sectionId = $(this).data("id");
 
+    $.get("{{ route('tower.section.history', ':id') }}".replace(':id', sectionId), function (data) {
+        var header = `
+          <tr class="" style="background: #ddebff;color:black;">
+            <th>#</th>
+            
+            <th>Section</th>
+            <th>RKM</th>
+            <th>Foundation Stn Scope</th><th>Foundation Stn Comp</th>
+            <th>Erection Stn Scope</th><th>Erection Stn Comp</th>
+            <th>Foundation Scope</th><th>Foundation Comp</th>
+            <th>Erection Scope</th><th>Erection Comp</th>
+            <th>Changed By</th>
+            <th>Changed At</th>
+          </tr>
+        `;
+
+        var rows = "";
+        data.forEach(function (item, index) {
+            let s = JSON.parse(item.snapshot_json);
+
+            rows += `
+              <tr>
+                <td>${index + 1}</td>
+              
+                <td>${item.section_name ?? s.section_id}</td>
+                <td>${s.rkm}</td>
+                <td>${s.tower_foundation_stn_scope}</td><td>${s.tower_foundation_stn_comp}</td>
+                <td>${s.tower_erection_stn_scope}</td><td>${s.tower_erection_stn_comp}</td>
+                <td>${s.tower_foundation_scope}</td><td>${s.tower_foundation_comp}</td>
+                <td>${s.tower_erection_scope}</td><td>${s.tower_erection_comp}</td>
+                  <td>${item.changed_by}</td>
+                <td>${item.changed_at}</td>
+              </tr>
+            `;
+        });
+
+        $("#towerHistoryTableHead").html(header);
+        $("#towerHistoryTableBody").html(rows);
+
+        // Bootstrap 5 way to open modal
+        var myModal = new bootstrap.Modal(document.getElementById('towerHistoryModal'));
+        myModal.show();
+    });
+});
+</script>
 
 
 
@@ -704,7 +887,13 @@ canvas {
                 <td>
                     <button type="submit" class="btn btn-success btn-sm px-3 shadow-sm">Update</button>
                 </td>
-                <td class="text-muted small">{{ $rowthree->updated_at?->format('Y-m-d') }}</td>
+                <td class="text-muted small">
+
+                <a type="button" class=" view-ofc-history" data-id="{{ $rowthree->id }}">
+  {{ $rowthree->updated_at?->format('d-m-Y') }}
+</a>
+
+                </td>
             </tr>
         </form>
         @endforeach
@@ -721,9 +910,70 @@ canvas {
 
 
 
+<div class="modal fade" id="ofcHistoryModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header text-white" style="background: linear-gradient(to right, #5780bf, #5780bf);">
+        <h5 class="modal-title">OFC Section History</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body history-modal-body">
+        <table class="table table-bordered table-striped table-sm history-table">
+          <thead id="ofcHistoryTableHead"></thead>
+          <tbody id="ofcHistoryTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 
 
+<script>
+  $(document).on("click", ".view-ofc-history", function () {
+    var sectionId = $(this).data("id");
 
+    $.get("{{ route('ofc.section.history', ':id') }}".replace(':id', sectionId), function (data) {
+        var header = `
+          <tr class="" style="background: #ddebff;color:black;">
+            <th>#</th>
+            
+            <th>Section</th>
+            <th>RKM</th>
+            <th>OFC Duct Scope</th><th>OFC Duct Comp</th>
+            <th>OFC Lay Scope</th><th>OFC Lay Comp</th>
+            <th>Outdoor Design Scope</th><th>Outdoor Design Comp</th>
+            <th>Changed By</th>
+            <th>Changed At</th>
+          </tr>
+        `;
+
+        var rows = "";
+        data.forEach(function (item, index) {
+            let s = JSON.parse(item.snapshot_json);
+            rows += `
+              <tr>
+                <td>${index + 1}</td>
+                
+                <td>${item.section_name ?? s.section_id}</td>
+                <td>${s.rkm}</td>
+                <td>${s.ofc_duct_scope}</td><td>${s.ofc_duct_comp}</td>
+                <td>${s.ofc_lay_scope}</td><td>${s.ofc_lay_comp}</td>
+                <td>${s.outdoor_design_scope}</td><td>${s.outdoor_design_comp}</td>
+                <td>${item.changed_by}</td>
+                <td>${item.changed_at}</td>
+              </tr>
+            `;
+        });
+
+        $("#ofcHistoryTableHead").html(header);
+        $("#ofcHistoryTableBody").html(rows);
+
+        var myModal = new bootstrap.Modal(document.getElementById('ofcHistoryModal'));
+        myModal.show();
+    });
+});
+
+</script>
 
 
 
@@ -886,5 +1136,6 @@ thead {
 }
  </style>
 <!-- Bootstrap JS (with Popper) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 @include('includes.footer')
