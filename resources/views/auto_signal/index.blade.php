@@ -201,15 +201,19 @@ Add Project
     <th>Target(RKM)</th>
     <th>Completed(RKM)</th>
     <th>Balance(RKM)</th>
-    <th>Tender</th>
     <th>ESP</th>
     <th>SIP</th>
-    <th>CRS Sanction</th>
-    <th>Building/TDC</th>
+    <th>RCC</th>
+    <th>SWR & SWRD</th>
+    <th>Interface</th>
+    <th>Application Logic</th>
+    <th>FAT</th>
+    <th>SAT</th>
+    <th>Tender</th>
     <th>Indoor Progress(%)</th>
     <th>Outdoor Progress(%)</th>
+    <th>GM Sanction</th>
     <th>TDC</th>
-    <th>Agency</th>
     <th>Action</th>
     <th>Updated</th>
 </tr>
@@ -218,17 +222,12 @@ Add Project
 @foreach($projects as $row)
 <tr>
     <td>{{ $loop->iteration }}</td>
-    <td style="text-align: left;">{{ $row->station->name ?? '-' }}</td>
-    <td style="text-align: left;">{{ $row->planHead->code ?? '-' }}</td>
-    <td style="text-align: left;">{{ $row->work_type }}</td>
-    <td>
-        <select class="form-control status-dropdown" 
-        data-id="{{ $row->id }}" 
-        data-field="tender_status">
-            <option value="0" {{ $row->tender_status == 0 ? 'selected' : '' }}>Pending</option>
-            <option value="1" {{ $row->tender_status == 1 ? 'selected' : '' }}>Awarded</option>
-        </select>
-    </td>
+    <td style="text-align: left;">{{ $row->division->code ?? '-' }}</td>
+    <td style="text-align: left;">{{ $row->section->name ?? '-' }}</td>
+    <td style="width: 1px"><input name="target_rkm" value="{{ $row->target_rkm }}" data-field="target_rkm"></td>
+    <td style="width: 1px"><input name="completd_rkm" value="{{ $row->completed_rkm }}" data-field="completed_rkm"></td>
+    <td style="width: 1px"><input name="balance_rkm" value="{{ $row->balance_rkm }}" data-field="balance_rkm"></td>
+
     <td>
         <select class="form-control status-dropdown"
         data-id="{{ $row->id }}"
@@ -249,21 +248,60 @@ Add Project
     <td>
         <select class="form-control status-dropdown" 
         data-id="{{ $row->id }}" 
-        data-field="crs_status">
-        <option value="0" {{ $row->crs_status == 0 ? 'selected' : '' }}>Pending</option>
-        <option value="1" {{ $row->crs_status == 1 ? 'selected' : '' }}>Obtained</option>
-        <option value="2" {{ $row->crs_status == 2 ? 'selected' : '' }}>Submitted</option>
+        data-field="rcc_status">
+        <option value="0" {{ $row->rcc_status == 0 ? 'selected' : '' }}>Pending</option>
+        <option value="1" {{ $row->rcc_status == 1 ? 'selected' : '' }}>Obtained</option>
+        <option value="2" {{ $row->rcc_status == 2 ? 'selected' : '' }}>Submitted</option>
         </select>
     </td>
     <td>
         <select class="form-control status-dropdown" 
         data-id="{{ $row->id }}" 
-        data-field="building_status">
-        <option value="0" {{ $row->building_status == 0 ? 'selected' : '' }}>Pending</option>
-        <option value="1" {{ $row->building_status == 1 ? 'selected' : '' }}>Approved</option>
+        data-field="swr_status">
+        <option value="0" {{ $row->swr_status == 0 ? 'selected' : '' }}>Pending</option>
+        <option value="1" {{ $row->swr_status == 1 ? 'selected' : '' }}>Approved</option>
         </select>
     </td>
-
+    <td>
+        <select class="form-control status-dropdown" 
+        data-id="{{ $row->id }}" 
+        data-field="interface_status">
+            <option value="0" {{ $row->interface_status == 0 ? 'selected' : '' }}>Pending</option>
+            <option value="1" {{ $row->interface_status == 1 ? 'selected' : '' }}>Awarded</option>
+        </select>
+    </td>
+    <td>
+        <select class="form-control status-dropdown" 
+        data-id="{{ $row->id }}" 
+        data-field="app_logc_status">
+            <option value="0" {{ $row->app_logic_status == 0 ? 'selected' : '' }}>Pending</option>
+            <option value="1" {{ $row->app_logic_status == 1 ? 'selected' : '' }}>Awarded</option>
+        </select>
+    </td>
+     <td>
+        <select class="form-control status-dropdown" 
+        data-id="{{ $row->id }}" 
+        data-field="fat_status">
+            <option value="0" {{ $row->fat_status == 0 ? 'selected' : '' }}>Pending</option>
+            <option value="1" {{ $row->fat_status == 1 ? 'selected' : '' }}>Awarded</option>
+        </select>
+    </td>
+     <td>
+        <select class="form-control status-dropdown" 
+        data-id="{{ $row->id }}" 
+        data-field="sat_status">
+            <option value="0" {{ $row->sat_status == 0 ? 'selected' : '' }}>Pending</option>
+            <option value="1" {{ $row->sat_status == 1 ? 'selected' : '' }}>Awarded</option>
+        </select>
+    </td>
+        <td>
+        <select class="form-control status-dropdown" 
+        data-id="{{ $row->id }}" 
+        data-field="tender_status">
+            <option value="0" {{ $row->tender_status == 0 ? 'selected' : '' }}>Pending</option>
+            <option value="1" {{ $row->tender_status == 1 ? 'selected' : '' }}>Awarded</option>
+        </select>
+    </td>
     <td>
     <select name="indoor_progress"
             class="form-control form-control-sm progress-dropdown" 
@@ -288,19 +326,27 @@ Add Project
         @endfor
         </select>
     </td>
+      <td>
+        <select class="form-control status-dropdown" 
+        data-id="{{ $row->id }}" 
+        data-field="gm_sanction_status">
+            <option value="0" {{ $row->gm_sanction_status == 0 ? 'selected' : '' }}>Pending</option>
+            <option value="1" {{ $row->gm_sanction_status == 1 ? 'selected' : '' }}>Awarded</option>
+        </select>
+    </td>
     <td>
         <input type="date" 
         class="form-control form-control-sm datepicker-field" 
-        value="{{ $row->tds_target ? \Carbon\Carbon::parse($row->tds_target)->format('Y-m-d') : '' }}" 
+        value="{{ $row->tds_target ? \Carbon\Carbon::parse($row->tdc_target)->format('Y-m-d') : '' }}" 
         data-id="{{ $row->id }}" 
         data-field="tds_target">
     </td>
-    <td style="text-align: left;">{{ $row->agency->name ?? '-' }}</td>
+
     <td>
         <button type="button" 
         name="scope_id" 
         value="{{ $row->id }}" 
-        class="btn btn-success btn-sm px-3 shadow-sm">
+        class="btn btn-success updateData btn-sm px-3 shadow-sm">
         Update
         </button>
     </td>
@@ -308,8 +354,7 @@ Add Project
 
    <a href="javascript:void(0)"
 class="view-history-btn"
-data-id="{{ $row->id }}"
-data-history='@json($row->history)'>
+data-id="{{ $row->id }}">
 {{ \Carbon\Carbon::parse($row->changed_at)->timezone('Asia/Kolkata')->format('d-M-Y H:i') }}
 </a>
 </td>
@@ -319,7 +364,21 @@ data-history='@json($row->history)'>
         <div class="update-alert alert alert-success py-1 px-2 my-1 mb-0"></div>
     </td>
 </tr>   
+
 @endforeach
+@php
+    $totalTarget = $projects->sum('target_rkm');
+    $totalCompleted = $projects->sum('completed_rkm');
+    $totalBalance = $projects->sum('balance_rkm');
+@endphp
+
+<tr class="table-primary fw-bold">
+    <td colspan="3" class="text-end">Total:</td>
+    <td>{{ $totalTarget }}</td>
+    <td>{{ $totalCompleted }}</td>
+    <td>{{ $totalBalance }}</td>
+    <td colspan="15"></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -364,60 +423,44 @@ data-history='@json($row->history)'>
       </div>
       
       <!-- Form -->
-      <form id="addProjectForm" action="{{ route('projects.store') }}" method="POST">
+      <form id="addProjectForm" action="{{ route('auto_signal.store') }}" method="POST">
         @csrf
         <div class="modal-body p-4">
 
           <!-- Station -->
           <div class="mb-3">
-            <label for="station" class="form-label fw-semibold">Select Station</label>
-            <select name="station_id" id="station" class="form-select border-primary" required>
+            <label for="division" class="form-label fw-semibold">Select Division</label>
+            <select name="division_id" id="division" class="form-select border-primary" required>
               <option value="">-- Select Station --</option>
-              @foreach($station as $stations)
-                <option value="{{ $stations->id }}">{{ $stations->name }}</option>
+              @foreach($division as $divisions)
+                <option value="{{ $divisions->id }}">{{ $divisions->code }}</option>
               @endforeach
             </select>
           </div>
 
           <!-- Plan Head -->
           <div class="mb-3">
-            <label for="planhead" class="form-label fw-semibold">Select Plan Head</label>
-            <select name="ph_id" id="planhead" class="form-select border-primary" required>
-              <option value="">-- Select Plan Head --</option>
-              @foreach($planhead as $ph)
-                <option value="{{ $ph->id }}">{{ $ph->code }} </option>
+            <label for="section" class="form-label fw-semibold">Select Section</label>
+            <select name="section_id" id="section" class="form-select border-primary" required>
+              <option value="">-- Select Section--</option>
+              @foreach($section as $sections)
+                <option value="{{ $sections->id }}">{{ $sections->name }} </option>
               @endforeach
             </select>
           </div>
 
           <!-- Work Type -->
           <div class="mb-3">
-            <label for="work_type" class="form-label fw-semibold">Work Type</label>
-            <select name="work_type" id="work_type" class="form-select border-primary" required>
-              <option value="">-- Select Work Type --</option>
-              <option value="Alteration">Alteration</option>
-              <option value="New">New</option>
-              <option value="Replacement">Replacement</option>
+            <label for="target_year" class="form-label fw-semibold">Work Type</label>
+            <select name="target_year" id="target_year" class="form-select border-primary" required>
+              <option>-- Select Work Type --</option>
+              <option value="2021">2021</option>
+              <option value="2022">2022</option>
+              <option value="2023">2023</option>
+              <option value="2024">2024</option>
+              <option value="2025">2025</option>
             </select>
           </div>
-
-          <!-- Agency -->
-          <div class="mb-3">
-            <label for="agency" class="form-label fw-semibold">Select Agency</label>
-            <select name="agency_id" id="agency" class="form-select border-primary" required>
-              <option value="">-- Select Agency --</option>
-              @foreach($agency as $ag)
-                <option value="{{ $ag->id }}">{{ $ag->name }}</option>
-              @endforeach
-            </select>
-          </div>
-
-            <div class="mb-3">
-            <label for="tdc" class="form-label fw-semibold">TDC</label>
-            <input type="date" name="tds"
-           class="form-control form-control-sm datepicker-field" 
-           >
-            </div>
         </div>
         
         <!-- Footer -->
@@ -512,6 +555,7 @@ $(document).on('submit', '#addProjectForm', function(e) {
     let form = $(this);
     let url = form.attr('action');
     let formData = form.serialize();
+
     $.ajax({
         url: url,
         type: "POST",
@@ -556,7 +600,7 @@ $(document).ready(function() {
     e.preventDefault();
 
     const projectId = $(this).data('id');
-    const url = "{{ url('/projects') }}/" + projectId + "/history";
+    const url = "{{ url('/auto_signal_projects') }}/" + projectId + "/history";
 
     // show loader
     $('#historyModalBody').html('<p class="text-center text-muted">Loading...</p>');
@@ -584,7 +628,7 @@ $(document).ready(function() {
 
 <script>
 
-$(document).on("click", ".btn-success", function () {
+$(document).on("click", ".updateData", function () {
     let row = $(this).closest("tr");
     let projectId = $(this).val();
 
@@ -592,18 +636,26 @@ $(document).on("click", ".btn-success", function () {
     let data = {
         id: projectId,
         _token: "{{ csrf_token() }}",
-        tender_status: row.find("[data-field='tender_status']").val(),
+        target_rkm: row.find("[data-field='target_rkm']").val(),
+        completed_rkm: row.find("[data-field='completed_rkm']").val(),
+        balance_rkm: row.find("[data-field='balance_rkm']").val(),
+        interface_status: row.find("[data-field='interface_status']").val(),
+        rcc_status: row.find("[data-field='rcc_status']").val(),
+        swr_status: row.find("[data-field='swr_status']").val(),
+        app_logic_status: row.find("[data-field='app_logic_status']").val(),
         esp_status: row.find("[data-field='esp_status']").val(),
         sip_status: row.find("[data-field='sip_status']").val(),
-        crs_status: row.find("[data-field='crs_status']").val(),
-        building_status: row.find("[data-field='building_status']").val(),
+        fat_status: row.find("[data-field='fat_status']").val(),
+        sat_status: row.find("[data-field='sat_status']").val(),
+        gm_sanction_status: row.find("[data-field='gm_sanction_status']").val(),
         indoor_progress_pct: row.find("[data-field='indoor_progress_pct']").val(),
         outdoor_progress_pct: row.find("[data-field='outdoor_progress_pct']").val(),
-        tds_target: row.find("[data-field='tds_target']").val(),
+        tender_status: row.find("[data-field='tender_status']").val(),
+        tdc_target: row.find("[data-field='tdc_target']").val(),
     };
 
     $.ajax({
-        url: "{{ route('projects.updateField') }}", // your route
+        url: "{{ route('autosignal.updateField') }}", // your route
         method: "POST",
         data: data,
         success: function (res) {

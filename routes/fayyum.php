@@ -12,5 +12,6 @@ Route::post('/obub', [ObubController::class, 'store'])->name('obub.store');
 // Inline update (row-wise AJAX) — matches route('obub.updateField') used in view
 Route::post('/obub/update-field', [ObubController::class, 'updateField'])->name('obub.updateField');
 
+Route::get('/obub-data/{id}/history', [ObubController::class, 'obubHistory'])->name('obubData.history');
 // (Optional) Agar state→district server-side chahiye ho:
 // Route::get('/obub/districts', [ObubController::class, 'districtsByState'])->name('obub.districts');

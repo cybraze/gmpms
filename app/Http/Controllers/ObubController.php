@@ -61,48 +61,80 @@ class ObubController extends Controller
     }
 
     public function updateField(Request $request)
-    {
-        $request->validate([
-            'id'    => 'required|exists:obub_data,id',
-            'field' => 'required|string',
-            'value' => 'nullable',
-        ]);
+{
+    $request->validate([
+        'id'     => 'required|exists:obub_data,id',
+        'fields' => 'required|array',
+    ]);
 
-        $row = ObubData::findOrFail($request->id);
+    $row = ObubData::findOrFail($request->id);
 
-        // allow-list (security): sirf inline fields hi update hon
-        $allowed = [
-            'tvu_date','block_sec_km','work_type','gad_app','est_sanct','sanc_cost',
-            'award_tender','sanc_cost_sharing','land_acqu','phy_prog','finan_prog','gqgd','pmo',
-            'lc_location','target','tdc','tdc_fy','brief_remarks','target_rob',
-            'target_rub','completion_date','lc_elim_date'
-        ];
+    $allowed = [
+        'tvu_date','block_sec_km','work_type','gad_app','est_sanct','sanc_cost',
+        'award_tender','sanc_cost_sharing','land_acqu','phy_prog','finan_prog',
+        'gqgd','pmo','lc_location','target','tdc','tdc_fy','brief_remarks',
+        'target_rob','target_rub','completion_date','lc_elim_date'
+    ];
 
-        if (!in_array($request->field, $allowed, true)) {
-            return response()->json(['success' => false, 'message' => 'Field not allowed'], 422);
+    foreach ($request->fields as $field => $value) {
+        if (in_array($field, $allowed, true)) {
+            if (in_array($field, ['completion_date','lc_elim_date'], true)) {
+                $row->{$field} = $value ? date('Y-m-d', strtotime($value)) : null;
+            } else {
+                $row->{$field} = $value;
+            }
         }
-
-        // dates normalise
-        if (in_array($request->field, ['completion_date','lc_elim_date'], true)) {
-            $row->{$request->field} = $request->value ? date('Y-m-d', strtotime($request->value)) : null;
-        } else {
-            $row->{$request->field} = $request->value;
-        }
-        $row->updated_on = now();
-        $row->save();
-
-        return response()->json([
-            'success' => true,
-            'id'      => $row->id,
-            'message' => ucfirst(str_replace('_',' ',$request->field)).' updated successfully!'
-        ]);
     }
 
+    $row->updated_on = now();
+    $row->save();
+
+    return response()->json([
+        'success' => true,
+        'id'      => $row->id,
+        'message' => 'Record updated successfully!'
+    ]);
+}
     // (optional) ajax dependent dropdown if you prefer server-side
     public function districtsByState(Request $request) {
         $request->validate(['state_id' => 'required|exists:obub_states,id']);
         $list = ObubDistrict::where('state_id', $request->state_id)->orderBy('name')->get(['id','name']);
         return response()->json(['success'=>true,'data'=>$list]);
     }
+
+      public function obubHistory($id)
+{
+    $obubData = \App\Models\ObubData::with(['histories.user'])->findOrFail($id);
+
+    $histories = $obubData->histories()->latest('changed_at')->get();
+
+    // Fetch lookup data
+    $states    = \App\Models\ObubState::pluck('name', 'id')->toArray();
+    $districts = \App\Models\ObubDistrict::pluck('name', 'id')->toArray();
+    $divisions = \App\Models\Division::pluck('code', 'id')->toArray();
+
+    // Decode snapshot JSON + replace IDs with names
+    $histories->transform(function ($history) use ($states, $districts, $divisions) {
+        $snapshot = json_decode($history->snapshot_json, true);
+
+        if (isset($snapshot['state_id'])) {
+            $snapshot['state'] = $states[$snapshot['state_id']] ?? $snapshot['state_id'];
+        }
+        if (isset($snapshot['dist_id'])) {
+            $snapshot['district'] = $districts[$snapshot['dist_id']] ?? $snapshot['dist_id'];
+        }
+        if (isset($snapshot['div_id'])) {
+            $snapshot['division'] = $divisions[$snapshot['div_id']] ?? $snapshot['div_id'];
+        }
+
+        $history->snapshot_array = $snapshot;
+        return $history;
+    });
+
+    $html = view('obub_history', compact('obubData', 'histories'))->render();
+
+    return response()->json(['success' => true, 'html' => $html]);
+}
+
 }
 

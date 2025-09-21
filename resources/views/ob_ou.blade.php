@@ -233,7 +233,12 @@ thead{color:#000 !important;text-shadow:none !important;background:#bbcde5 !impo
 
       
       <td class="text-muted small">
-  {{ $row->updated_on ? $row->updated_on->format('Y-m-d H:i') : '-' }}
+        <a href="javascript:void(0)"
+class="view-history-btn"
+data-id="{{ $row->id }}">
+{{ \Carbon\Carbon::parse($row->updated_on)->timezone('Asia/Kolkata')->format('d-M-Y H:i') }}
+</a>
+
 </td>
 
     </tr>
@@ -253,6 +258,27 @@ thead{color:#000 !important;text-shadow:none !important;background:#bbcde5 !impo
 </main>
 </div>
 
+
+<!-- Single History Modal -->
+<div class="modal fade" id="historyModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title">Project History</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body" id="historyModalBody">
+        <!-- content will be injected here by AJAX -->
+        <p class="text-center text-muted">Loading...</p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 {{-- Add OBUB Modal --}}
 <div class="modal fade" id="addObubModal" tabindex="-1" aria-labelledby="addObubLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -414,27 +440,87 @@ $(document).on('click', '.btn-success', function () {
   let id  = $(this).val();
 
   let fields = {};
+
+  // collect only changed values
   row.find('input, select, textarea').each(function() {
     const f = $(this).data('field');
-    if (f) { fields[f] = $(this).val(); }
+    if (f) {
+      let currentVal = $(this).val();
+      let originalVal = $(this).attr('data-original');
+
+      if (currentVal !== originalVal) {
+        fields[f] = currentVal;
+      }
+    }
   });
 
-  $.each(fields, function(field, value) {
+  if ($.isEmptyObject(fields)) {
+    alert("No changes to update.");
+    return;
+  }
+
+  $.ajax({
+    url: "{{ route('obub.updateField') }}",
+    type: "POST",
+    data: { id:id, fields:fields, _token:'{{ csrf_token() }}' },
+    success: function(res){
+      if(res.success){
+        let alertRow = $("#alert-row-"+res.id);
+        alertRow.find('.update-alert').text(res.message);
+        alertRow.removeClass('d-none').fadeIn();
+        setTimeout(()=>alertRow.fadeOut(),2000);
+
+        // update original values
+        row.find('input, select, textarea').each(function() {
+          const f = $(this).data('field');
+          if (f && fields[f] !== undefined) {
+            $(this).attr('data-original', fields[f]);
+          }
+        });
+      }
+    },
+    error: function(){ alert('Error updating record'); }
+  });
+});
+</script>
+<script>
+$(document).ready(function() {
+
+  // Single modal element
+  const historyModalEl = document.getElementById('historyModal');
+  let historyModal = null;
+  if (historyModalEl) {
+    historyModal = new bootstrap.Modal(historyModalEl);
+  }
+
+  // Click handler
+  $(document).on('click', '.view-history-btn', function(e) {
+    e.preventDefault();
+
+    const projectId = $(this).data('id');
+    const url = "{{ url('/obub-data') }}/" + projectId + "/history";
+
+    // show loader
+    $('#historyModalBody').html('<p class="text-center text-muted">Loading...</p>');
+    historyModal.show();
+
     $.ajax({
-      url: "{{ route('obub.updateField') }}",
-      type: "POST",
-      data: { id:id, field:field, value:value, _token:'{{ csrf_token() }}' },
-      success: function(res){
-        if(res.success){
-          let alertRow = $("#alert-row-"+res.id);
-          alertRow.find('.update-alert').text(res.message);
-          alertRow.removeClass('d-none').fadeIn();
-          setTimeout(()=>alertRow.fadeOut(),2000);
+      url: url,
+      type: 'GET',
+      success: function(res) {
+        if (res.success) {
+          $('#historyModalBody').html(res.html);
+        } else {
+          $('#historyModalBody').html('<p class="text-danger">No history found.</p>');
         }
       },
-      error: function(){ alert('Error updating '+field); }
+      error: function(xhr) {
+        console.error(xhr);
+        $('#historyModalBody').html('<p class="text-danger">Error loading history.</p>');
+      }
     });
   });
+
 });
 </script>
 

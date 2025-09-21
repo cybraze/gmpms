@@ -26,6 +26,30 @@ class ObubData extends Model
         'created_on'      => 'datetime',
         'updated_on'      => 'datetime',
     ];
+    public function histories()
+    {
+    return $this->hasMany(ObubHistory::class, 'obub_id');
+    }
+    protected static function booted()
+    {
+    static::created(function ($record) {
+    ObubHistory::create([
+        'obub_id' => $record->id,
+        'snapshot_json' => json_encode($record->toArray()),
+        'changed_by' => auth()->id(),
+        'changed_at' => now(),
+    ]);
+    });
+
+    static::updated(function ($record) {
+    ObubHistory::create([
+        'obub_id' => $record->id,
+        'snapshot_json' => json_encode($record->toArray()),
+        'changed_by' => auth()->id(),
+        'changed_at' => now(),
+    ]);
+    });
+    }
 
     public function state()        { return $this->belongsTo(ObubState::class, 'state_id'); }
     public function district()     { return $this->belongsTo(ObubDistrict::class, 'dist_id'); }
