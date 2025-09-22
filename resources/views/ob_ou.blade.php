@@ -228,7 +228,7 @@ thead{color:#000 !important;text-shadow:none !important;background:#bbcde5 !impo
       </td>
 
       <td>
-        <button type="button" value="{{ $row->id }}" class="btn btn-success btn-sm px-3 shadow-sm">Update</button>
+        <button type="button" value="{{ $row->id }}" class="btn btn-success updateData btn-sm px-3 shadow-sm">Update</button>
       </td>
 
       
@@ -435,7 +435,7 @@ $(document).on('submit', '#addObubForm', function(e) {
 
 {{-- AJAX: inline update (same button pattern) --}}
 <script>
-$(document).on('click', '.btn-success', function () {
+$(document).on('click', '.updateData', function () {
   let row = $(this).closest('tr');
   let id  = $(this).val();
 

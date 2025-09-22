@@ -298,7 +298,7 @@ Add Project
         <button type="button" 
         name="scope_id" 
         value="{{ $row->id }}" 
-        class="btn btn-success btn-sm px-3 shadow-sm">
+        class="btn btn-success updateData btn-sm px-3 shadow-sm">
         Update
         </button>
     </td>
@@ -582,7 +582,7 @@ $(document).ready(function() {
 
 <script>
 
-$(document).on("click", ".btn-success", function () {
+$(document).on("click", ".updateData", function () {
     let row = $(this).closest("tr");
     let projectId = $(this).val();
 
