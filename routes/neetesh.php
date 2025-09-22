@@ -17,4 +17,16 @@ Route::get('/AutoSignalProject', [ProjectController::class, 'auto_signal_project
 
 
 
+Route::get('/auto_signal_projects/{id}/history', [AutoSignalController::class, 'history'])->name('auto_signal_projects.history');
+Route::get('/AutoSignalProject', [AutoSignalController::class, 'auto_signal_project'])
+     ->name('auto_signal_project');
+Route::post('/AutoSignalProjectInsert', [AutoSignalController::class, 'Insert'])->name('auto_signal.store');
+Route::post('/AutoSignalUpdateField', [AutoSignalController::class, 'updateField'])
+     ->name('autosignal.updateField');
+
+     
+
+
+
+
 ?>

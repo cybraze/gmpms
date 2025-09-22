@@ -193,6 +193,35 @@ canvas {
   </a>
 </div>
 
+<div class="col-md-6 col-xl-3">
+  <a href="{{ route('section_target_details', $project->id) }}" 
+     class="text-decoration-none text-dark">
+    <div class="dashboard-card card-blue">
+      <div class="icon-box"><i class="bi bi-file-earmark-check-fill"></i></div>
+      <div><h5 class="card-title">Section Target</h5></div>
+    </div>
+  </a>
+</div>
+<div class="col-md-6 col-xl-3">
+  <a href="{{ route('loco_kavach_details', $project->id) }}" 
+     class="text-decoration-none text-dark">
+    <div class="dashboard-card card-orange">
+      <div class="icon-box"><i class="bi bi-file-earmark-check-fill"></i></div>
+      <div><h5 class="card-title">Loco</h5></div>
+    </div>
+  </a>
+</div>
+<div class="col-md-6 col-xl-3">
+  <a href="{{ route('training_section_details', $project->id) }}" 
+     class="text-decoration-none text-dark">
+    <div class="dashboard-card card-green">
+      <div class="icon-box"><i class="bi bi-file-earmark-check-fill"></i></div>
+      <div><h5 class="card-title">Training</h5></div>
+    </div>
+  </a>
+</div>
+
+
 
 
 

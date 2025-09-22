@@ -169,7 +169,7 @@ canvas {
 
 
 
-<div class="container-fluid px-4 mt-5 mb-5">
+<div class="container-fluid px-4 mt-5" style="margin-bottom: 100px;">
 
          @if(session('success'))
     <div class="alert alert-success" id="success-alert">
@@ -190,52 +190,65 @@ canvas {
 
 
 
+<form action="{{ route('save.preparatory_scope') }}" method="POST">
+  @csrf
+  <input type="hidden" name="new_project_id" value="{{ $id }}">
 
-  <form action="{{ route('save.preparatory_scope') }}" method="POST">
-    @csrf
-<input type="hidden" name="new_project_id" value="{{ $id }}">
-
-
-    @foreach($data as $object)
-      <div class="card border-0 shadow mb-4" style="border-radius: 1rem;">
-        <div class="card-header text-white fw-bold d-flex align-items-center"
-             style="background: linear-gradient(to right, #5780bf, #5780bf); border-radius: 1rem 1rem 0 0;">
-          <i class="bi bi-diagram-3 me-2 fs-5"></i> {{ $object['object_name'] }}
-        </div>
-
-        <div class="card-body bg-light px-4">
-          @foreach($object['items'] as $index => $item)
-            <div class="row align-items-center mb-3">
-              <div class="col-md-4 fw-bold">
-                {{ $item->item_name }} 
-                <small class="text-muted">({{ $item->unit }})</small>
-              </div>
- <div class="col-md-5">
-                <input type="text" class="form-control" 
-                       name="items[{{ $loop->parent->index }}_{{ $index }}][description]" 
-                       placeholder="Enter description">
-              </div>
-              <div class="col-md-3">
-                <!-- Hidden Item ID -->
-                <input type="hidden" name="items[{{ $loop->parent->index }}_{{ $index }}][item_id]" value="{{ $item->id }}">
-                <input type="text" class="form-control" 
-                       name="items[{{ $loop->parent->index }}_{{ $index }}][scope]" 
-                       placeholder="Enter scope">
-              </div>
-
-             
-            </div>
-          @endforeach
-        </div>
+  @foreach($data as $object)
+    <div class="card border-0 shadow mb-4" style="border-radius: 1rem;">
+      <div class="card-header text-white fw-bold d-flex align-items-center"
+           style="background: linear-gradient(to right, #5780bf, #5780bf); border-radius: 1rem 1rem 0 0;">
+        <i class="bi bi-diagram-3 me-2 fs-5"></i> {{ $object['object_name'] }}
       </div>
-    @endforeach
 
+      <div class="card-body bg-light px-4">
+        @foreach($object['items'] as $index => $item)
+          @php
+              // is item ke liye saved row (agar form pehle submit ho chuka hai)
+              $saved = isset($existing) ? ($existing[$item->id] ?? null) : null;
+          @endphp
+
+          <div class="row align-items-center mb-3">
+            <div class="col-md-4 fw-bold">
+              {{ $item->item_name }}
+              <small class="text-muted">({{ $item->unit }})</small>
+            </div>
+
+            <div class="col-md-5">
+              <input type="text" class="form-control"
+                     name="items[{{ $loop->parent->index }}_{{ $index }}][description]"
+                     value="{{ old('items.'.$loop->parent->index.'_'.$index.'.description', $saved->description ?? '') }}"
+                     placeholder="Enter description"
+                     {{ $isLocked ? 'disabled' : '' }}>
+            </div>
+
+            <div class="col-md-3">
+              <input type="hidden"
+                     name="items[{{ $loop->parent->index }}_{{ $index }}][item_id]"
+                     value="{{ $item->id }}">
+              <input type="text" class="form-control"
+                     name="items[{{ $loop->parent->index }}_{{ $index }}][scope]"
+                     value="{{ old('items.'.$loop->parent->index.'_'.$index.'.scope', $saved->scope ?? '') }}"
+                     placeholder="Enter scope"
+                     {{ $isLocked ? 'disabled' : '' }}>
+            </div>
+          </div>
+        @endforeach
+      </div>
+    </div>
+  @endforeach
+
+  {{-- Save button: sirf tab dikhaye jab pehli baar submit nahi hua --}}
+  @unless($isLocked)
     <div class="text-end" style="margin-bottom: 100px;">
-      <button type="submit" class="btn px-4 text-white" style="background: linear-gradient(to right, #5780bf, #5780bf);">
+      <button type="submit" class="btn px-4 text-white"
+              style="background: linear-gradient(to right, #5780bf, #5780bf);">
         <i class="bi bi-save me-1"></i> Save
       </button>
     </div>
-  </form>
+  @endunless
+</form>
+
 </div>
 
 

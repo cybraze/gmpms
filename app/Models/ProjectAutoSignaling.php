@@ -6,8 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProjectAutoSignaling extends Model
 {
-    //
-      use HasFactory;
+
 
     protected $table = 'project_auto_signaling';
 
@@ -41,6 +40,31 @@ class ProjectAutoSignaling extends Model
         static::saving(function ($model) {
             $model->balance_rkm = max(0, $model->target_rkm - $model->completed_rkm);
         });
+
+
+
+ /*   }
+    protected static function booted()
+    {*/
+        // When a project_auto_signaling is created
+        static::created(function ($record) {
+            AutoSignalingHistory::create([
+                'auto_signaling_id' => $record->id,  // link history
+                'snapshot_json'     => json_encode($record->toArray()),
+                'changed_by'        => auth()->id(),
+                'changed_at'        => now(),
+            ]);
+        });
+
+        // When a project_auto_signaling is updated
+        static::updated(function ($record) {
+            AutoSignalingHistory::create([
+                'auto_signaling_id' => $record->id,
+                'snapshot_json'     => json_encode($record->toArray()),
+                'changed_by'        => auth()->id(),
+                'changed_at'        => now(),
+            ]);
+        });
     }
 
     // Relationships
@@ -53,6 +77,12 @@ class ProjectAutoSignaling extends Model
     {
         return $this->belongsTo(AutoSignalSection::class, 'section_id');
     }
+
+    public function histories()
+    {
+        return $this->hasMany(AutoSignalingHistory::class, 'auto_signaling_id');
+    }
+
 
     // Progress percentage helper
     public function getOverallProgressAttribute()

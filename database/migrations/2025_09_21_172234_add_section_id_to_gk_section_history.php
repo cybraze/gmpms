@@ -9,21 +9,21 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
-{
-    Schema::create('project_type', function (Blueprint $table) {
-        $table->id();
-        $table->string('name');
-        $table->timestamps(); // created_at & updated_at auto aa jayenge
-    });
-}
+    public function up(): void
+    {
+        Schema::table('gk_section_history', function (Blueprint $table) {
+    $table->unsignedBigInteger('section_id')->nullable()->after('new_project_id');
+});
 
+    }
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('project_type');
+        Schema::table('gk_section_history', function (Blueprint $table) {
+            //
+        });
     }
 };

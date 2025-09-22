@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class AutoSignalSection extends Model
 {
-    //
-    use HasFactory;
 
     protected $table = 'auto_signal_section';
     protected $fillable = ['division_id', 'name'];

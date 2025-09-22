@@ -56,6 +56,21 @@ border-radius: 5px !important;
 border-radius: 10px !important;
 padding: 6px 12px;
 }
+
+#datatablesSimple th, #datatablesSimple td {
+    border: 1px solid #dee2e6 !important;
+    padding: 3px 10px !important;
+    vertical-align: middle;
+}
+
+
+.card-body {
+    flex: 1 1 auto;
+    padding: 0rem 10px !important;
+}
+
+.card-header {
+    padding: 0.1rem 1rem !important;}
 </style>
 <div id="layoutSidenav_content">
   <main>
@@ -95,7 +110,7 @@ padding: 6px 12px;
   
  <form method="POST" action="{{ route('new_project.store') }}">
         @csrf
-        <div class="row">
+        <div class="row mb-3">
         
         <div class="col-md-4">
             <label class="form-label">Project Name</label>
