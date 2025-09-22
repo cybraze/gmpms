@@ -27,6 +27,8 @@ use App\Models\TowerSectionHistory;
 use App\Models\OfcSectionHistory;
 use App\Models\LocoKavachSectionHistory;
 use App\Models\KavachTrainingSectionHistory;
+use Illuminate\Support\Facades\DB;
+
 
 class UserController extends Controller
 {
@@ -74,13 +76,13 @@ public function store_new_project(Request $request)
     {
         // ✅ Validation
         $request->validate([
-            'project_type_id' => 'required|exists:project_type,id',
+            
             'project_name' => 'required|string|max:255',
         ]);
 
         // ✅ Insert data
         NewProject::create([
-            'project_type_id' => $request->project_type_id,
+           
             'project_name'    => $request->project_name,
         ]);
 

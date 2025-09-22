@@ -552,21 +552,26 @@ border-color: #083785;" id="btnNavbarSearch" type="submit"><i class="fas fa-sear
   Dashboard
 </a>
 
-<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-   data-bs-target="#collapseReports" aria-expanded="false" aria-controls="collapseReports">
-  <div class="sb-nav-link-icon"><i class="fas fa-chart-line"></i></div>
-  Projects
-  <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+<a class="nav-link {{ request()->routeIs('create_new_project') ? 'active' : '' }}" href="{{ route('create_new_project') }}">
+  <div class="sb-nav-link-icon"><i class="fas fa-folder-open"></i></div>
+  KAVACH Works
 </a>
-<div class="collapse" id="collapseReports" data-bs-parent="#sidenavAccordion">
-  <nav class="sb-sidenav-menu-nested nav">
 
-  <a class="nav-link" href="{{ route('create_new_project') }}">
-    <i class="fas fa-folder-open me-2"></i>KAVACH Works
-  </a>
+<a class="nav-link {{ request()->routeIs('ei_works') ? 'active' : '' }}" href="{{route('ei_works')}}">
+  <div class="sb-nav-link-icon"><i class="fas fa-folder-open"></i></div>
+  EI Works
+</a>
 
-  </nav>
-</div>
+<a class="nav-link {{ request()->routeIs('auto_signal_project') ? 'active' : '' }}" href="{{ route('auto_signal_project') }}">
+  <div class="sb-nav-link-icon"><i class="fas fa-folder-open"></i></div>
+  Auto Signalling
+</a>
+
+<a class="nav-link {{ request()->routeIs('ob_ub_works') ? 'active' : '' }}" href="{{ route('ob_ub_works') }}">
+  <div class="sb-nav-link-icon"><i class="fas fa-folder-open"></i></div>
+  ROB/RUB Works
+</a>
+
 
 
 <!-- <a class="nav-link {{ request()->routeIs('user_details') ? 'active' : '' }}" href="{{ route('user_details') }}">
@@ -578,7 +583,7 @@ border-color: #083785;" id="btnNavbarSearch" type="submit"><i class="fas fa-sear
 
 
 
-<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseManage" aria-expanded="false" aria-controls="collapseManage">
+<!-- <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseManage" aria-expanded="false" aria-controls="collapseManage">
     <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
     Update Data
     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
@@ -597,16 +602,13 @@ border-color: #083785;" id="btnNavbarSearch" type="submit"><i class="fas fa-sear
       <a class="nav-link" href="">Tender</a>
        <a class="nav-link" href="">Training</a>
         <a class="nav-link" href="">Loco</a>
-        <a class="nav-link" href="{{route('ei_works')}}">EI Works</a>
-        <a class="nav-link" href="{{route('auto_signal_project')}}">Auto Signalling</a>
-
-        <a class="nav-link" href="{{route('ob_ub_works')}}">ROB/RUB Works</a>
+       
         
     </nav>
     </div>
    
     </nav>
-    </div>
+    </div> -->
 
 
                         </div>

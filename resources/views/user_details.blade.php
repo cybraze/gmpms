@@ -173,6 +173,32 @@ canvas {
 
 .card-header {
     padding: 0.1rem 1rem !important;}
+
+
+    .table>:not(caption)>*>* {
+    padding: .0rem .5rem !important;
+    background-color: var(--bs-table-bg);
+    border-bottom-width: 1px;
+    box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
+}
+
+.nowrap {
+  white-space: nowrap;       /* 👈 break hone se rokega */
+  overflow: hidden;          /* optional */
+  text-overflow: ellipsis;   /* optional ... dikhayega */
+  max-width: 200px;          /* 👈 apni marzi se set karo */
+}
+
+.btn-xs {
+  font-size: 11px;    /* font chhota */
+  padding: 2px 6px;   /* button ki height/width chhoti */
+  line-height: 1.2;
+}
+
+
+.table>tbody {
+    font-size: 13px !important;
+}
 </style>
 <div id="layoutSidenav_content">
     <main>
@@ -202,9 +228,9 @@ canvas {
 
 
   
-<h3 class="mb-3 fw-bold text-left text-dark">
+<h4 class="mb-3 fw-bold text-left text-dark">
     Preparatory Works Status for Ground Kavach (NGP-JSG)
-</h3>
+</h4>
 <form action="{{ route('update.progress') }}" method="POST">
     @csrf
 
@@ -220,7 +246,7 @@ canvas {
                 <th style="width: 8px;">Progress</th>
                 <th>Balance</th>
                 <th>Action</th>
-                <th>Updated</th>
+                <th class="nowrap">Updated</th>
             </tr>
         </thead>
         <tbody>
@@ -240,18 +266,20 @@ canvas {
                     <td class="fw-bold text-danger">{{ $row->scope - $row->progress }}</td>
                     <td>
                         <button type="submit" 
-                                name="scope_id" 
-                                value="{{ $row->id }}" 
-                                class="btn btn-success btn-sm px-3 shadow-sm">
-                            Update
-                        </button>
+        name="scope_id" 
+        value="{{ $row->id }}" 
+        class="btn btn-success btn-xs px-2 shadow-sm" style="padding-top: 2px !important;
+    padding-bottom: 2px !important;">
+    Update
+</button>
+
                     </td>
-                    <td class="text-muted small">
+                    <td class="text-muted small nowrap">
                           <a href="javascript:void(0)"
      class="open-history"
      data-id="{{ $row->id }}"
      data-history='@json($row->history)'>
-     {{ \Carbon\Carbon::parse($row->updated_at)->timezone('Asia/Kolkata')->format('d-M-Y H:i') }}
+     {{ \Carbon\Carbon::parse($row->updated_at)->timezone('Asia/Kolkata')->format('d-M-Y') }}
   </a>
                         <br>
        <span style="color: #000;">
@@ -278,11 +306,11 @@ canvas {
 
 
 
-<h3 class="mb-3 fw-bold text-left text-dark">
+<h4 class="mb-3 fw-bold text-left text-dark">
    Preparatory Works Status for Tower 			
 			
 
-</h3>
+</h4>
 
 <div class="table-responsive">
     <table class="table table-bordered table-hover align-middle shadow-sm custom-table">
@@ -315,12 +343,13 @@ canvas {
                     </td>
                     <td class="fw-bold text-danger">{{ $row->scope - $row->progress }}</td>
                     <td>
-                        <button type="submit" 
-                                name="scope_id" 
-                                value="{{ $row->id }}" 
-                                class="btn btn-success btn-sm px-3 shadow-sm">
-                            Update
-                        </button>
+                           <button type="submit" 
+        name="scope_id" 
+        value="{{ $row->id }}" 
+        class="btn btn-success btn-xs px-2 shadow-sm" style="padding-top: 2px !important;
+    padding-bottom: 2px !important;">
+    Update
+</button>
                     </td>
                     <td class="text-muted small">
                      
@@ -328,7 +357,7 @@ canvas {
      class="open-history"
      data-id="{{ $row->id }}"
      data-history='@json($row->history)'>
-     {{ \Carbon\Carbon::parse($row->updated_at)->timezone('Asia/Kolkata')->format('d-M-Y H:i') }}
+     {{ \Carbon\Carbon::parse($row->updated_at)->timezone('Asia/Kolkata')->format('d-M-Y') }}
   </a>
     <br>
                                     <span style="color: #000;">
@@ -354,11 +383,11 @@ canvas {
 
 
 
-<h3 class="mb-3 fw-bold text-left text-dark">
+<h4 class="mb-3 fw-bold text-left text-dark">
     Preparatory Works Status for OFC 			
 			
 
-</h3>
+</h4>
 
 <div class="table-responsive">
     <table class="table table-bordered table-hover align-middle shadow-sm custom-table">
@@ -391,19 +420,20 @@ canvas {
                     </td>
                     <td class="fw-bold text-danger">{{ $row->scope - $row->progress }}</td>
                     <td>
-                        <button type="submit" 
-                                name="scope_id" 
-                                value="{{ $row->id }}" 
-                                class="btn btn-success btn-sm px-3 shadow-sm">
-                            Update
-                        </button>
+                          <button type="submit" 
+        name="scope_id" 
+        value="{{ $row->id }}" 
+        class="btn btn-success btn-xs px-2 shadow-sm" style="padding-top: 2px !important;
+    padding-bottom: 2px !important;">
+    Update
+</button>
                     </td>
                    <td class="text-muted small">
    <a href="javascript:void(0)"
      class="open-history"
      data-id="{{ $row->id }}"
      data-history='@json($row->history)'>
-     {{ \Carbon\Carbon::parse($row->updated_at)->timezone('Asia/Kolkata')->format('d-M-Y H:i') }}
+     {{ \Carbon\Carbon::parse($row->updated_at)->timezone('Asia/Kolkata')->format('d-M-Y') }}
   </a>
   <br>
   <span style="color: #000;">

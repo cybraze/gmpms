@@ -130,6 +130,12 @@ table tbody tr td {
   border-left: 6px solid #ffc187;
 }
 
+
+.card-red {
+  background: linear-gradient(135deg, #ff4b2b, #b31217);
+  border-left: 6px solid #ff9a8b;
+}
+
 /* Canvas and card styling for 3D feel */
 canvas {
   background: #fff;
@@ -171,58 +177,89 @@ canvas {
     <!-- SLIDE 1: YOUR CURRENT DASHBOARD CONTENT -->
     <div class="carousel-item active">
       <div class="row g-4">
-
+<div class="col-12">
+    <h4 class="fw-bold text-uppercase d-flex align-items-center" 
+        style="color:#2c3e50; letter-spacing:1px;">
+      <i class="bi bi-speedometer2 me-2 text-primary"></i> 
+      Railway Signalling Work Dashboard
+    </h4>
+  </div>
       <!-- Approved Contracts -->
 <div class="col-md-6 col-xl-3">
-  <a href="" class="text-decoration-none text-dark">
-    <div class="dashboard-card card-purple">
-      <div class="icon-box"><i class="bi bi-file-earmark-check-fill"></i></div>
-      <div><h5 class="card-title">Approved Contracts</h5></div>
-    </div>
-  </a>
-</div>
-
-<!-- Expiring Soon Contracts -->
-<div class="col-md-6 col-xl-3">
-  <div class="dashboard-card card-blue">
-    <div class="icon-box"><i class="bi bi-alarm-fill"></i></div>
-    <div><h5 class="card-title">Expiring Soon Contracts</h5><h2 class="card-count"></h2></div>
-  </div>
-</div>
-
-<!-- Total Vendors -->
-<div class="col-md-6 col-xl-3">
-  <div class="dashboard-card card-green">
-    <div class="icon-box"><i class="bi bi-shop"></i></div>
-    <div><h5 class="card-title">Total Vendors</h5><h2 class="card-count"></h2></div>
-  </div>
-</div>
-
-<!-- Active Users -->
-<div class="col-md-6 col-xl-3">
-  <a href="" style="text-decoration: none;">
-    <div class="dashboard-card card-orange">
-      <div class="icon-box"><i class="bi bi-person-check-fill"></i></div>
-      <div><h5 class="card-title">Active Users</h5></div>
+  <a href="#" class="text-decoration-none text-dark">
+    <div class="dashboard-card card-purple text-center">
+      <div class="icon-box"><i class="bi bi-graph-up-arrow"></i></div>
+      <div>
+        <h6 class="card-title mb-1" style="text-align:left;">Total RKM <br>Target 2024-2025</h6>
+        <h4 class="fw-bold text-light" style="text-align:left;">276</h4>
+      </div>
     </div>
   </a>
 </div>
 
 
+<div class="col-md-6 col-xl-3">
+  <a href="#" class="text-decoration-none text-dark">
+    <div class="dashboard-card card-blue text-center">
+      <div class="icon-box"><i class="bi bi-alarm-fill"></i></div>
+      <div>
+        <h6 class="card-title mb-1" style="text-align:left;">Total RKM <br>Commissioned insl spillover</h6>
+        <h4 class="fw-bold text-light" style="text-align:left;">65</h4>
+      </div>
+    </div>
+  </a>
+</div>
+
+<div class="col-md-6 col-xl-3">
+  <a href="#" class="text-decoration-none text-dark">
+    <div class="dashboard-card card-green text-center">
+      <div class="icon-box"><i class="bi bi-alarm-fill"></i></div>
+      <div>
+        <h6 class="card-title mb-1" style="text-align:left;">Total RKM <br>Where FAT Completed</h6>
+        <h4 class="fw-bold text-light" style="text-align:left;">9</h4>
+      </div>
+    </div>
+  </a>
+</div>
+
+<div class="col-md-6 col-xl-3">
+  <a href="#" class="text-decoration-none text-dark">
+    <div class="dashboard-card card-orange text-center">
+      <div class="icon-box"><i class="bi bi-alarm-fill"></i></div>
+      <div>
+        <h6 class="card-title mb-1" style="text-align:left;">Total RKM <br>Where SAT Completed</h6>
+        <h4 class="fw-bold text-light" style="text-align:left;">9</h4>
+      </div>
+    </div>
+  </a>
+</div>
+
+<!-- <div class="col-md-6 col-xl-3">
+  <a href="#" class="text-decoration-none text-dark">
+    <div class="dashboard-card card-red text-center">
+      <div class="icon-box"><i class="bi bi-alarm-fill"></i></div>
+      <div>
+        <h6 class="card-title mb-1" style="text-align:left;">Total RKM <br>Where outdoor progress 100%</h6>
+        <h4 class="fw-bold text-light" style="text-align:left;">9</h4>
+      </div>
+    </div>
+  </a>
+</div> -->
+ <div class="col-lg-6 mb-4">
+          <div class="card shadow rounded-4 p-4 h-100" style="background:#ffffff;border-radius:10px;">
+            <h5 class="mb-3"><span style="text-shadow:1px 1px #fff, 2px 2px rgba(0,0,0,0.4);">Progress Distribution</span></h5>
+            <canvas id="progressDonutChart" style="max-height:340px;"></canvas>
+          </div>
+        </div>
         <!-- Charts -->
         <div class="col-lg-6 mb-4">
           <div class="card shadow rounded-4 p-4 h-100" style="background:#ffffff;border-radius:10px;">
-            <h5 class="mb-3"><span style="text-shadow:1px 1px #fff, 2px 2px rgba(0,0,0,0.4);">ACP Cases in the Last Six Months</span></h5>
-            <canvas id="caseBarChart" style="max-height:340px;"></canvas>
+            <h5 class="mb-3"><span style="text-shadow:1px 1px #fff, 2px 2px rgba(0,0,0,0.4);">Section Overview</span></h5>
+            <canvas id="sectionBarChart" style="max-height:340px;"></canvas>
           </div>
         </div>
 
-        <div class="col-lg-6 mb-4">
-          <div class="card shadow rounded-4 p-4 h-100" style="background:#ffffff;border-radius:10px;">
-            <h5 class="mb-3"><span style="text-shadow:1px 1px #fff, 2px 2px rgba(0,0,0,0.4);">Vendor Requests —  Approval Status</span></h5>
-            <canvas id="casePieChart" style="max-height:340px;"></canvas>
-          </div>
-        </div>
+       
 
       </div>
     </div>
@@ -232,7 +269,7 @@ canvas {
   <div class="row g-4">
     <div class="col-12">
       <div class="card shadow rounded-4 p-3">
-        <h5 class="mb-3">GIS MAP - STATION-WISE CONTRACT DETAILS</h5>
+        <h5 class="mb-3">GIS MAP - STATION-WISE KAVACH PROGRESS</h5>
         <div id="map" style="height:70vh; border-radius:14px;"></div>
       </div>
     </div>
@@ -326,7 +363,6 @@ canvas {
 }
 
     </style>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <!-- Bootstrap bundle + Leaflet JS already loaded hona chahiye -->
 <script>
@@ -336,7 +372,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Ensure carousel instance
   const bsCar = bootstrap.Carousel.getInstance(car) ||
-                new bootstrap.Carousel(car, { interval: 4000, pause: false, ride: 'carousel' });
+                new bootstrap.Carousel(car, { interval: 15000, pause: false, ride: 'carousel' });
 
   // ===== Map init on map slide =====
   let map, inited = false;
@@ -396,83 +432,105 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Chart.js + Datalabels plugin -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
 <script>
-  $(document).ready(function () {
+  // ===== BAR CHART (Section Overview) =====
+  const ctxSection = document.getElementById("sectionBarChart").getContext("2d");
 
-    // ===== BAR CHART (STATIC) =====
-    const ctxBar = document.getElementById('caseBarChart').getContext('2d');
-
-    // Static labels & counts
-    const labels = ['JAN', 'FEB', 'MAR', 'APRL', 'MAY', 'JUNE'];
-    const counts = [42, 35, 27, 19, 12, 8];
-
-    new Chart(ctxBar, {
-      type: 'bar',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Data',
-          data: counts,
-          backgroundColor: [
-            'rgba(111, 66, 193, 0.9)', // purple
-            'rgba(13, 110, 253, 0.9)', // blue
-            'rgba(25, 135, 84, 0.9)',  // green
-            'rgba(253, 126, 20, 0.9)', // orange
-            'rgba(255, 99, 132, 0.9)', // pink
-            'rgba(255, 206, 86, 0.9)'  // yellow
-          ],
-          borderRadius: 8,
-          borderSkipped: false
-        }]
+  new Chart(ctxSection, {
+    type: "bar",
+    data: {
+      labels: [
+        "Rajgama-Kotnia",
+        "Kotnia-Jaranga",
+        "Jaranga-Dagihora",
+        "Dagihora-Hirangi",
+        "Champa-Saragoon",
+        "Saragoon-Baredikur",
+        "Baredikur-Sakti",
+        "Sakti-SPOCL"
+      ],
+      datasets: [
+        {
+          label: "Indoor Progress",
+          data: [90, 95, 10, 15, 98, 12, 60, 30],
+          backgroundColor: "#0dcaf0"
+        },
+        {
+          label: "Outdoor Progress",
+          data: [92, 97, 12, 18, 96, 70, 65, 45],
+          backgroundColor: "#ffc107"
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: "bottom",
+          labels: { color: "#000", font: { size: 13, weight: "600" } }
+        }
       },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: {
-          x: {
-            grid: { display: false },
-            ticks: { font: { size: 14, weight: 'bold' }, color: '#333' }
-          },
-          y: {
-            beginAtZero: true,
-            grid: { color: 'rgba(0,0,0,0.05)' },
-            ticks: { font: { size: 13 }, color: '#555' }
+      scales: {
+        x: {
+          ticks: {
+            autoSkip: false, // 👈 saare labels dikhenge
+            maxRotation: 60, // thoda angle karke readable
+            minRotation: 45,
+            color: "#000",
+            font: { size: 11, weight: "bold" }
+          }
+        },
+        y: {
+          beginAtZero: true,
+          max: 100,
+          ticks: { color: "#000", font: { size: 12 } }
+        }
+      }
+    }
+  });
+
+  // ===== DONUT CHART (Progress Distribution) =====
+  const ctxDonut = document.getElementById("progressDonutChart").getContext("2d");
+
+  new Chart(ctxDonut, {
+    type: "doughnut",
+    data: {
+      labels: ["Completed", "In Progress", "Pending"],
+      datasets: [{
+        data: [120, 30, 126],
+        backgroundColor: ["#198754", "#ffc107", "#dc3545"],
+        borderWidth: 2
+      }]
+    },
+    options: {
+      cutout: "70%",
+      plugins: {
+        legend: {
+          position: "bottom",
+          labels: { color: "#000", font: { size: 13, weight: "600" } }
+        },
+        datalabels: {   // 👈 plugin se labels dikhane ke liye
+          color: "#fff",
+          font: { size: 14, weight: "bold" },
+          formatter: (value, ctx) => {
+            let total = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+            let percentage = ((value / total) * 100).toFixed(1) + "%";
+            return percentage;
           }
         }
       }
-    });
-
-    // ===== PIE CHART (STATIC) =====
-    const ctxPie = document.getElementById('casePieChart').getContext('2d');
-
-    const completed = 75; // static
-    const pending   = 25; // static
-
-    new Chart(ctxPie, {
-      type: 'pie',
-      data: {
-        labels: ['Approved', 'Pending'],
-        datasets: [{
-          data: [completed, pending],
-          backgroundColor: ['#198754', '#ffc107'], // green, amber
-          hoverOffset: 10
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: 'bottom',
-            labels: { color: '#333', font: { size: 13, weight: '600' } }
-          }
-        }
-      }
-    });
-
+    },
+    plugins: [ChartDataLabels] // plugin activate
   });
 </script>
+
 
 
 @include('includes.footer')
