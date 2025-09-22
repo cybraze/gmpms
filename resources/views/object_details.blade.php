@@ -197,9 +197,15 @@ canvas {
   @foreach($data as $object)
     <div class="card border-0 shadow mb-4" style="border-radius: 1rem;">
       <div class="card-header text-white fw-bold d-flex align-items-center"
-           style="background: linear-gradient(to right, #5780bf, #5780bf); border-radius: 1rem 1rem 0 0;">
-        <i class="bi bi-diagram-3 me-2 fs-5"></i> {{ $object['object_name'] }}
-      </div>
+     style="background: linear-gradient(to right, #5780bf, #5780bf); border-radius: 1rem 1rem 0 0;">
+  <i class="bi bi-diagram-3 me-2 fs-5"></i> 
+  {{ $object['object_name'] }}
+
+  <a href="{{ route('user_details') }}" class="btn btn-light btn-sm ms-auto">
+    <i class="bi bi-box-arrow-up-right"></i> Update Progress
+  </a>
+</div>
+
 
       <div class="card-body bg-light px-4">
         @foreach($object['items'] as $index => $item)

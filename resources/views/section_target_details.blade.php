@@ -173,6 +173,38 @@ canvas {
 
 .card-header {
     padding: 0.1rem 1rem !important;}
+
+    .nowrap {
+  white-space: nowrap;       /* 👈 break hone se rokega */
+  overflow: hidden;          /* optional */
+  text-overflow: ellipsis;   /* optional ... dikhayega */
+  max-width: 200px;          /* 👈 apni marzi se set karo */
+}
+
+.btn-xs {
+  font-size: 11px;    /* font chhota */
+  padding: 2px 6px;   /* button ki height/width chhoti */
+  line-height: 1.2;
+}
+
+
+.table>tbody {
+    font-size: 13px !important;
+}
+
+    .table>:not(caption)>*>* {
+    padding: .1rem .5rem !important;
+    background-color: var(--bs-table-bg);
+    border-bottom-width: 1px;
+    box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
+}
+
+.form-control-sm {
+    min-height: calc(0.5em + (.5rem + 2px)) !important;
+    padding: 0rem .5rem;
+    font-size: .875rem;
+    border-radius: .2rem;
+}
 </style>
 <div id="layoutSidenav_content">
     <main>
@@ -202,13 +234,13 @@ canvas {
 
 
    
-<h3 class="mb-3 fw-bold text-left text-dark d-flex justify-content-between align-items-center">
+<h4 class="mb-3 fw-bold text-left text-dark d-flex justify-content-between align-items-center">
     Section Target Works Status for Ground Kavach
 
     <button type="button" class="btn btn-primary btn-sm shadow-sm" data-bs-toggle="modal" data-bs-target="#addDataModal">
         <i class="bi bi-plus-lg me-1"></i> Add Data
     </button>
-</h3>
+</h4>
 
 
 <div class="table-responsive">
@@ -228,7 +260,7 @@ canvas {
             <th colspan="3">Indoor Design Documents</th>
             <th colspan="3">Indoor Design Documents</th>
             <th>Action</th>
-            <th>Updated</th>
+            <th class="nowrap">Updated</th>
         </tr>
         <tr>
             <th></th><th></th><th></th>
@@ -301,10 +333,11 @@ canvas {
                 <td>{{ $row->idd_hut_scope - $row->idd_hut_comp }}</td>
 
                 <!-- Action + Updated -->
-                <td>
-                    <button type="submit" class="btn btn-success btn-sm px-3 shadow-sm">Update</button>
+                <td >
+                    <button type="submit"  class="btn btn-success btn-xs px-2 shadow-sm" style="padding-top: 2px !important;
+    padding-bottom: 2px !important;">Update</button>
                 </td>
-                <td class="text-muted small">
+                <td class="text-muted small nowrap">
      <a type="button" class=" view-history" data-id="{{ $row->id }}">
              {{ $row->updated_at?->format('d-m-Y') }}
       </a>
@@ -556,13 +589,13 @@ $(document).on("click", ".view-history", function () {
 
 
    
-<h3 class="mb-3 fw-bold text-left text-dark d-flex justify-content-between align-items-center mt-5">
+<h4 class="mb-3 fw-bold text-left text-dark d-flex justify-content-between align-items-center mt-3">
     Section Target Works Status for Tower
 
     <button type="button" class="btn btn-primary btn-sm shadow-sm" data-bs-toggle="modal" data-bs-target="#addDataModaltwo">
         <i class="bi bi-plus-lg me-1"></i> Add Data
     </button>
-</h3>
+</h4>
 
 
 <div class="table-responsive">
@@ -627,7 +660,8 @@ $(document).on("click", ".view-history", function () {
 
                 <!-- Action + Updated -->
                 <td>
-                    <button type="submit" class="btn btn-success btn-sm px-3 shadow-sm">Update</button>
+                    <button type="submit"  class="btn btn-success btn-xs px-2 shadow-sm" style="padding-top: 2px !important;
+    padding-bottom: 2px !important;">Update</button>
                 </td>
                 <td class="text-muted small">
 
@@ -821,13 +855,13 @@ $(document).on("click", ".view-tower-history", function () {
 
 
    
-<h3 class="mb-3 fw-bold text-left text-dark d-flex justify-content-between align-items-center mt-5">
+<h4 class="mb-3 fw-bold text-left text-dark d-flex justify-content-between align-items-center mt-3">
     Section Target Works Status for OFC
 
     <button type="button" class="btn btn-primary btn-sm shadow-sm" data-bs-toggle="modal" data-bs-target="#addDataModalthree">
         <i class="bi bi-plus-lg me-1"></i> Add Data
     </button>
-</h3>
+</h4>
 
 
 <div class="table-responsive">
@@ -885,7 +919,8 @@ $(document).on("click", ".view-tower-history", function () {
 
                 <!-- Action + Updated -->
                 <td>
-                    <button type="submit" class="btn btn-success btn-sm px-3 shadow-sm">Update</button>
+                    <button type="submit"  class="btn btn-success btn-xs px-2 shadow-sm" style="padding-top: 2px !important;
+    padding-bottom: 2px !important;">Update</button>
                 </td>
                 <td class="text-muted small">
 
