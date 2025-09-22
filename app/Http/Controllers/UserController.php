@@ -143,10 +143,21 @@ public function object_details($id)
 
 public function section_target_details($id)
 {
+
     $sections = MasterKavachSection::all();
-    $data = GkSectionData::with('section')->get();
-    $towerdata = TowerSectionData::with('section')->get();
-    $ofcdata = OfcSectionData::with('section')->get();
+
+    $data = GkSectionData::with('section')
+            ->where('new_project_id', $id)
+            ->get();
+
+$towerdata = TowerSectionData::with('section')
+            ->where('new_project_id', $id)
+            ->get();
+
+$ofcdata = OfcSectionData::with('section')
+            ->where('new_project_id', $id)
+            ->get();
+
 // 👇 Map of section_id => section_name
     $sectionsMap = MasterKavachSection::pluck('section_name', 'id')->toArray();
 
@@ -467,7 +478,9 @@ public function loco_kavach_details($id)
     $sections = LocoShedHoldingMaster::all();
 
     // relation ke sath kavach data
-    $locodata = SectionLocoKavach::with(['shed'])->get();
+    $locodata = SectionLocoKavach::with(['shed'])
+                ->where('new_project_id', $id)
+                ->get();
     return view('loco_kavach_details', compact('sections','locodata','id'));
 }
 
@@ -553,17 +566,21 @@ public function getLocoKavachHistory($id)
 
 
 public function training_section_details($id)
-{  $dept1 = KavachTrainingSection::with('staff')
-                ->whereHas('staff', fn($q) => $q->where('dept_id', 1))
-                ->get();
+{ $dept1 = KavachTrainingSection::with('staff')
+            ->where('new_project_id', $id)
+            ->whereHas('staff', fn($q) => $q->where('dept_id', 1))
+            ->get();
 
-    $dept2 = KavachTrainingSection::with('staff')
-                ->whereHas('staff', fn($q) => $q->where('dept_id', 2))
-                ->get();
+$dept2 = KavachTrainingSection::with('staff')
+            ->where('new_project_id', $id)
+            ->whereHas('staff', fn($q) => $q->where('dept_id', 2))
+            ->get();
 
-    $dept3 = KavachTrainingSection::with('staff')
-                ->whereHas('staff', fn($q) => $q->where('dept_id', 3))
-                ->get();
+$dept3 = KavachTrainingSection::with('staff')
+            ->where('new_project_id', $id)
+            ->whereHas('staff', fn($q) => $q->where('dept_id', 3))
+            ->get();
+
       $departments = \App\Models\DepartmentMaster::orderBy('staff_dept')->get();
 
     return view('training_section_details', compact('id','departments','dept1','dept2','dept3'));
