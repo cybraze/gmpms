@@ -69,7 +69,7 @@ class AutoSignalController extends Controller
         $allowed = [
         'tender_status','target_rkm','completed_rkm','balance_rkm','esp_status','sip_status','rcc_status',
         'swr_status','interface_status','app_logic_status','fat_status','sat_status','gm_sanction_status','tdc_target',
-        'indoor_progress_pct','outdoor_progress_pct','tds_target'
+        'indoor_progress_pct','outdoor_progress_pct','tds_target','is_commisioned'
         ];
 
         foreach ($allowed as $field) {

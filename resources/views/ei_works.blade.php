@@ -235,6 +235,7 @@ Add Project
     <th>SIP</th>
     <th>CRS Sanction</th>
     <th>Building/TDC</th>
+    <th>Is Commisioned</th>
     <th>Indoor Progress(%)</th>
     <th>Outdoor Progress(%)</th>
     <th>TDC</th>
@@ -290,6 +291,14 @@ Add Project
         data-field="building_status">
         <option value="0" {{ $row->building_status == 0 ? 'selected' : '' }}>Completed</option>
         <option value="1" {{ $row->building_status == 1 ? 'selected' : '' }}>Not Completed</option>
+        </select>
+    </td>
+    <td>
+        <select class="form-control status-dropdown" style="width:150px;padding: .175rem .75rem;"
+        data-id="{{ $row->id }}" 
+        data-field="is_commisioned_status">
+            <option value="0" {{ $row->is_commisioned == 0 ? 'selected' : '' }}>No</option>
+            <option value="1" {{ $row->is_commisioned == 1 ? 'selected' : '' }}>Yes</option>
         </select>
     </td>
 
@@ -630,6 +639,8 @@ $(document).on("click", ".updateData", function () {
         indoor_progress_pct: row.find("[data-field='indoor_progress_pct']").val(),
         outdoor_progress_pct: row.find("[data-field='outdoor_progress_pct']").val(),
         tds_target: row.find("[data-field='tds_target']").val(),
+        is_commisioned: row.find("[data-field='is_commisioned_status']").val(),
+        
     };
 
     $.ajax({

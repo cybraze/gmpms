@@ -1,4 +1,4 @@
-@include('includes.header')
+ @include('includes.header')
  <!-- Bootstrap Icons CDN -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 <!-- Bootstrap 5 CSS -->
@@ -181,18 +181,17 @@ canvas {
     <h4 class="fw-bold text-uppercase d-flex align-items-center" 
         style="color:#2c3e50; letter-spacing:1px;">
       <i class="bi bi-speedometer2 me-2 text-primary"></i> 
-      SECR Work Dashboard
+      RAILWAY SIGNALING WORK DASHBOARD
     </h4>
   </div>
       <!-- Approved Contracts -->
 <div class="col-md-6 col-xl-3">
-  <a href="{{route('kavach_works_dashboard')}}" class="text-decoration-none text-dark">
+  <a href="#" class="text-decoration-none text-dark">
     <div class="dashboard-card card-purple text-center">
       <div class="icon-box"><i class="bi bi-graph-up-arrow"></i></div>
       <div>
-     
-        <h6 class="card-title mb-1" style="text-align:left;">KAVACH Works </h6>
-        <h4 class="fw-bold text-light" style="text-align:left;">{{$totalTargetRkm}}</h4>
+        <h6 class="card-title mb-1" style="text-align:left;">Total RKM <br>Target 2024-2025</h6>
+        <h4 class="fw-bold text-light" style="text-align:left;">245</h4>
       </div>
     </div>
   </a>
@@ -200,38 +199,36 @@ canvas {
 
 
 <div class="col-md-6 col-xl-3">
-  <a href="{{route('ei_works_dashboard')}}" class="text-decoration-none text-dark">
+  <a href="#" class="text-decoration-none text-dark">
     <div class="dashboard-card card-blue text-center">
       <div class="icon-box"><i class="bi bi-alarm-fill"></i></div>
       <div>
-      
-        <h6 class="card-title mb-1" style="text-align:left;">EI Works</h6>
+        <h6 class="card-title mb-1" style="text-align:left;">Total RKM <br>Commissioned insl spillover</h6>
         <h4 class="fw-bold text-light" style="text-align:left;">65</h4>
-      </a>
-      </div>
-    </div>
-  
-</div>
-
-<div class="col-md-6 col-xl-3">
-  <a href="{{route('auto_signaling_dashboard')}}" class="text-decoration-none text-dark">
-    <div class="dashboard-card card-green text-center">
-      <div class="icon-box"><i class="bi bi-alarm-fill"></i></div>
-      <div>
-        <h6 class="card-title mb-1" style="text-align:left;">Auto Signaling</h6>
-        <h4 class="fw-bold text-light" style="text-align:left;">{{$totalFatCompletedRkm}}</h4>
       </div>
     </div>
   </a>
 </div>
 
 <div class="col-md-6 col-xl-3">
-  <a href="{{route('rob_rub_dashboard')}}" class="text-decoration-none text-dark">
+  <a href="#" class="text-decoration-none text-dark">
+    <div class="dashboard-card card-green text-center">
+      <div class="icon-box"><i class="bi bi-alarm-fill"></i></div>
+      <div>
+        <h6 class="card-title mb-1" style="text-align:left;">Total RKM <br>Where FAT Completed</h6>
+        <h4 class="fw-bold text-light" style="text-align:left;">245</h4>
+      </div>
+    </div>
+  </a>
+</div>
+
+<div class="col-md-6 col-xl-3">
+  <a href="#" class="text-decoration-none text-dark">
     <div class="dashboard-card card-orange text-center">
       <div class="icon-box"><i class="bi bi-alarm-fill"></i></div>
       <div>
-        <h6 class="card-title mb-1" style="text-align:left;">ROB/RUB works</h6>
-        <h4 class="fw-bold text-light" style="text-align:left;">{{$totalSatCompletedRkm}}</h4>
+        <h6 class="card-title mb-1" style="text-align:left;">Total RKM <br>Where SAT Completed</h6>
+        <h4 class="fw-bold text-light" style="text-align:left;">20</h4>
       </div>
     </div>
   </a>
@@ -247,19 +244,52 @@ canvas {
       </div>
     </div>
   </a>
-</div> -->
-
-
+</div>  -->
+ <div class="col-lg-6 mb-4">
+          <div class="card shadow rounded-4 p-4 h-100" style="background:#ffffff;border-radius:10px;">
+            <h5 class="mb-3"><span style="text-shadow:1px 1px #fff, 2px 2px rgba(0,0,0,0.4);">Progress Distribution</span></h5>
+            <canvas id="progressDonutChart" style="max-height:340px;"></canvas>
+          </div>
+        </div>
+        <!-- Charts -->
+        <div class="col-lg-6 mb-4">
+          <div class="card shadow rounded-4 p-4 h-100" style="background:#ffffff;border-radius:10px;">
+            <h5 class="mb-3"><span style="text-shadow:1px 1px #fff, 2px 2px rgba(0,0,0,0.4);">Section Overview</span></h5>
+            <canvas id="sectionBarChart" style="max-height:340px;"></canvas>
+          </div>
+        </div>
 
        
 
       </div>
     </div>
 
-   
+    <!-- SLIDE 2: MAP (or any other content) -->
+  <div class="carousel-item">
+  <div class="row g-4">
+    <div class="col-12">
+      <div class="card shadow rounded-4 p-3">
+        <h5 class="mb-3">GIS MAP - STATION-WISE KAVACH PROGRESS</h5>
+        <div id="map" style="height:70vh; border-radius:14px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
   </div>
+<!-- Bottom controls -->
+<div class="carousel-nav mt-2 text-center">
+  <button class="btn btn-nav me-2"
+          type="button" data-bs-target="#dashCarousel" data-bs-slide="prev">
+    <i class="bi bi-arrow-left-circle"></i>
+  </button>
+  <button class="btn btn-nav"
+          type="button" data-bs-target="#dashCarousel" data-bs-slide="next">
+    <i class="bi bi-arrow-right-circle"></i>
+  </button>
+</div>
 
 </div>
   
@@ -409,6 +439,97 @@ document.addEventListener('DOMContentLoaded', function () {
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
+<script>
+  // ===== BAR CHART (Section Overview) =====
+  const ctxSection = document.getElementById("sectionBarChart").getContext("2d");
 
+  new Chart(ctxSection, {
+    type: "bar",
+    data: {
+      labels: [
+        "Rajgama-Kotnia",
+        "Kotnia-Jaranga",
+        "Jaranga-Dagihora",
+        "Dagihora-Hirangi",
+        "Champa-Saragoon",
+        "Saragoon-Baredikur",
+        "Baredikur-Sakti",
+        "Sakti-SPOCL"
+      ],
+      datasets: [
+        {
+          label: "Indoor Progress",
+          data: [90, 95, 10, 15, 98, 12, 60, 30],
+          backgroundColor: "#0dcaf0"
+        },
+        {
+          label: "Outdoor Progress",
+          data: [92, 97, 12, 18, 96, 70, 65, 45],
+          backgroundColor: "#ffc107"
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: "bottom",
+          labels: { color: "#000", font: { size: 13, weight: "600" } }
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            autoSkip: false, // 👈 saare labels dikhenge
+            maxRotation: 60, // thoda angle karke readable
+            minRotation: 45,
+            color: "#000",
+            font: { size: 11, weight: "bold" }
+          }
+        },
+        y: {
+          beginAtZero: true,
+          max: 100,
+          ticks: { color: "#000", font: { size: 12 } }
+        }
+      }
+    }
+  });
+
+  // ===== DONUT CHART (Progress Distribution) =====
+  const ctxDonut = document.getElementById("progressDonutChart").getContext("2d");
+
+  new Chart(ctxDonut, {
+    type: "doughnut",
+    data: {
+      labels: ["Completed", "In Progress", "Pending"],
+      datasets: [{
+        data: [120, 30, 126],
+        backgroundColor: ["#198754", "#ffc107", "#dc3545"],
+        borderWidth: 2
+      }]
+    },
+    options: {
+      cutout: "70%",
+      plugins: {
+        legend: {
+          position: "bottom",
+          labels: { color: "#000", font: { size: 13, weight: "600" } }
+        },
+        datalabels: {   // 👈 plugin se labels dikhane ke liye
+          color: "#fff",
+          font: { size: 14, weight: "bold" },
+          formatter: (value, ctx) => {
+            let total = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+            let percentage = ((value / total) * 100).toFixed(1) + "%";
+            return percentage;
+          }
+        }
+      }
+    },
+    plugins: [ChartDataLabels] // plugin activate
+  });
+</script>
 
 @include('includes.footer')

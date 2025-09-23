@@ -222,6 +222,17 @@ canvas {
 </div>
 
 
+<div class="col-md-6 col-xl-3">
+  <a href="{{ route('tender_status_details', $project->id) }}" 
+     class="text-decoration-none text-dark">
+    <div class="dashboard-card card-green">
+      <div class="icon-box"><i class="bi bi-file-earmark-check-fill"></i></div>
+      <div><h5 class="card-title">Tender Status</h5></div>
+    </div>
+  </a>
+</div>
+
+
 
 
 
