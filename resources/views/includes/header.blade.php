@@ -571,6 +571,10 @@ border-color: #083785;" id="btnNavbarSearch" type="submit"><i class="fas fa-sear
   <div class="sb-nav-link-icon"><i class="fas fa-folder-open"></i></div>
   ROB/RUB Works
 </a>
+<a class="nav-link {{ request()->routeIs('ni_data') ? 'active' : '' }}" href="{{ route('ni_data') }}">
+  <div class="sb-nav-link-icon"><i class="fas fa-folder-open"></i></div>
+  NIs
+</a>
 
 
 

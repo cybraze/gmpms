@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\AutoSignalController;
+use App\Http\Controllers\NiController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,6 +24,19 @@ Route::get('/AutoSignalProject', [AutoSignalController::class, 'auto_signal_proj
 Route::post('/AutoSignalProjectInsert', [AutoSignalController::class, 'Insert'])->name('auto_signal.store');
 Route::post('/AutoSignalUpdateField', [AutoSignalController::class, 'updateField'])
      ->name('autosignal.updateField');
+
+
+
+Route::get('/NIData', [NiController::class, 'ni_data'])
+     ->name('ni_data');
+Route::post('/NIInsert', [NiController::class, 'Insert'])->name('ni_data.store');
+Route::post('/NIDataUpdateField', [NiController::class, 'updateField'])
+     ->name('ni_data.updateField');
+Route::get('/ni_data/{id}/history', [NiController::class, 'history'])->name('auto_signal_projects.history');
+     
+
+     
+
 
      
 
