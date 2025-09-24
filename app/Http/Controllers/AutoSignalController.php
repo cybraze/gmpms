@@ -35,6 +35,9 @@ class AutoSignalController extends Controller
         'section_id' => 'required|exists:auto_signal_section,id',
         'target_year' => 'required',
 
+        'target_rkm' => 'required',
+
+
         ]);
 
 
@@ -42,6 +45,8 @@ class AutoSignalController extends Controller
             'division_id' => $request->division_id,
             'section_id' => $request->section_id,
             'target_year' => $request->target_year,
+
+            'target_rkm' => $request->target_rkm,
        /*     'agency_id' => $request->agency_id,
             'tds_target' => $request->tds,
             'created_by' => auth()->id(),*/
@@ -67,7 +72,8 @@ class AutoSignalController extends Controller
         $allowed = [
         'tender_status','target_rkm','completed_rkm','balance_rkm','esp_status','sip_status','rcc_status',
         'swr_status','interface_status','app_logic_status','fat_status','sat_status','gm_sanction_status','tdc_target',
-        'indoor_progress_pct','outdoor_progress_pct','tds_target'
+        'indoor_progress_pct','outdoor_progress_pct','tds_target','is_commisioned'
+
         ];
 
         foreach ($allowed as $field) {
@@ -85,6 +91,14 @@ class AutoSignalController extends Controller
         ]);
 
     }
+
+    public function getSections($division_id)
+{
+    $sections = \App\Models\AutoSignalSection::where('division_id', $division_id)->get();
+
+    return response()->json($sections);
+}
+
    public function history($id)
 {
     $project = \App\Models\ProjectAutoSignaling::with(['division', 'section', 'histories.user'])

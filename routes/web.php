@@ -11,6 +11,12 @@ Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [UserController::class, 'home'])->name('home');
+ Route::get('/KavachWorksDashboard', [UserController::class, 'kavach_works_dashboard'])->name('kavach_works_dashboard');
+    Route::get('/EIWorksDashboard', [UserController::class, 'ei_works_dashboard'])->name('ei_works_dashboard');
+    Route::get('/AutoSignalingDashboard', [UserController::class, 'auto_signaling_dashboard'])->name('auto_signaling_dashboard');
+    Route::get('/RobRubDashboard', [UserController::class, 'rob_rub_dashboard'])->name('rob_rub_dashboard');
+
+
     Route::get('/create_new_project', [UserController::class, 'create_new_project'])->name('create_new_project');
     Route::post('/new_project/store', [UserController::class, 'store_new_project'])->name('new_project.store');
     Route::get('/project-sheets/{id}', [UserController::class, 'show_sheets'])->name('project_sheets.show');
@@ -48,6 +54,12 @@ Route::get('/view-training-history/{id}', [UserController::class, 'getTrainingSe
     Route::post('/training_stores', [UserController::class, 'training_section_store'])->name('training_store');
     Route::post('/training_update/{id}', [UserController::class, 'training_update_section'])->name('training_update');
 
+
+    Route::get('/tender_status_details/{id}', [UserController::class, 'tender_status_details'])->name('tender_status_details');
+    Route::post('/KavachTenderStore', [UserController::class, 'kavach_tender_status_store'])->name('kavach_tender_status.store');
+     
+    Route::post('/KavachTenderStatusUpdate', [UserController::class, 'kavach_tender_status_update'])->name('tender_status.updateField');
+    Route::get('/kavach_tender/{id}/history', [UserController::class, 'tender_history'])->name('kavach_tender.history');
 
 });
 

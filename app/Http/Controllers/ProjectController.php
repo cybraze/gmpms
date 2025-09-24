@@ -92,7 +92,9 @@ class ProjectController extends Controller
         $allowed = [
         'tender_status','esp_status','sip_status',
         'crs_status','building_status',
-        'indoor_progress_pct','outdoor_progress_pct','tds_target'
+
+        'indoor_progress_pct','outdoor_progress_pct','tds_target','is_commisioned'
+
         ];
 
         foreach ($allowed as $field) {

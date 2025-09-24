@@ -40,6 +40,37 @@ canvas{background:#fff;border-radius:1.5rem !important;box-shadow:inset 1px 1px 
 .custom-table input:focus{border-color:#007bff;box-shadow:0 0 4px #007bff66;transition:.2s}
 .btn-success:hover{background:#28a745;box-shadow:0 4px 10px rgba(0,128,0,.3);transform:translateY(-1px);transition:.2s}
 thead{color:#000 !important;text-shadow:none !important;background:#bbcde5 !important}
+
+.table>:not(caption)>*>* {
+    padding: .0rem .5rem !important;
+    background-color: var(--bs-table-bg);
+    border-bottom-width: 1px;
+    box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
+}
+
+.nowrap {
+  white-space: nowrap;       /* ðŸ‘ˆ break hone se rokega */
+  overflow: hidden;          /* optional */
+  text-overflow: ellipsis;   /* optional ... dikhayega */
+  max-width: 200px;          /* ðŸ‘ˆ apni marzi se set karo */
+}
+
+.btn-xs {
+  font-size: 11px;    /* font chhota */
+  padding: 2px 6px;   /* button ki height/width chhoti */
+  line-height: 1.2;
+}
+
+
+.table>tbody {
+    font-size: 13px !important;
+}
+
+.table>thead {
+    font-size: 13px !important;
+}
+
+
 </style>
 
 <div id="layoutSidenav_content">
@@ -56,13 +87,17 @@ thead{color:#000 !important;text-shadow:none !important;background:#bbcde5 !impo
   </script>
 @endif
 
-<h3 class="mb-3 fw-bold text-left text-dark">
-   List
+
+<h4 class="mb-3 fw-bold text-left text-dark">
+   List of ROB RUB Works
+
   <button type="button" class="btn btn-success btn-sm px-3 shadow-sm" style="float:right;"
           data-bs-toggle="modal" data-bs-target="#addObubModal">
     Add 
   </button>
-</h3>
+
+</h4>
+
 
 <form action="#" method="POST">
 @csrf
@@ -131,21 +166,27 @@ thead{color:#000 !important;text-shadow:none !important;background:#bbcde5 !impo
       @php $yn = [''=>'--','Y'=>'Y','N'=>'N']; @endphp
 
       <td>
-        <select class="form-control form-control-sm" data-id="{{ $row->id }}" data-field="gad_app">
+
+        <select class="form-control form-control-sm" style="width:90px;" data-id="{{ $row->id }}" data-field="gad_app">
+
           @foreach($yn as $k=>$v)<option value="{{ $k }}" {{ $row->gad_app===$k?'selected':'' }}>{{ $v }}</option>@endforeach
         </select>
       </td>
 
       <td>
-        <select class="form-control form-control-sm" data-id="{{ $row->id }}" data-field="est_sanct">
+
+        <select style="width:90px;" class="form-control form-control-sm" data-id="{{ $row->id }}" data-field="est_sanct">
+
           @foreach($yn as $k=>$v)<option value="{{ $k }}" {{ $row->est_sanct===$k?'selected':'' }}>{{ $v }}</option>@endforeach
         </select>
       </td>
 
-      <td><input class="form-control form-control-sm" value="{{ $row->sanc_cost }}" data-id="{{ $row->id }}" data-field="sanc_cost"></td>
+
+      <td><input style="width:90px;" class="form-control form-control-sm" value="{{ $row->sanc_cost }}" data-id="{{ $row->id }}" data-field="sanc_cost"></td>
 
       <td>
-        <select class="form-control form-control-sm" data-id="{{ $row->id }}" data-field="award_tender">
+        <select style="width:90px;" class="form-control form-control-sm" data-id="{{ $row->id }}" data-field="award_tender">
+
           @foreach($yn as $k=>$v)<option value="{{ $k }}" {{ $row->award_tender===$k?'selected':'' }}>{{ $v }}</option>@endforeach
         </select>
       </td>
@@ -153,7 +194,9 @@ thead{color:#000 !important;text-shadow:none !important;background:#bbcde5 !impo
       @php $yn = [''=>'--','Y'=>'Y','N'=>'N']; @endphp
 
 <td>
-  <select class="form-control form-control-sm"
+
+  <select class="form-control form-control-sm" style="width:90px;"
+
           data-id="{{ $row->id }}" data-field="sanc_cost_sharing">
     @foreach($yn as $k => $v)
       <option value="{{ $k }}" {{ $row->sanc_cost_sharing === $k ? 'selected' : '' }}>{{ $v }}</option>
@@ -163,7 +206,9 @@ thead{color:#000 !important;text-shadow:none !important;background:#bbcde5 !impo
 
 
       <td>
-        <select class="form-control form-control-sm" data-id="{{ $row->id }}" data-field="land_acqu">
+
+        <select style="width:90px;" class="form-control form-control-sm" data-id="{{ $row->id }}" data-field="land_acqu">
+
           @foreach($yn as $k=>$v)<option value="{{ $k }}" {{ $row->land_acqu===$k?'selected':'' }}>{{ $v }}</option>@endforeach
         </select>
       </td>
@@ -171,26 +216,39 @@ thead{color:#000 !important;text-shadow:none !important;background:#bbcde5 !impo
       <td><input type="number" min="0" max="100" class="form-control form-control-sm" value="{{ $row->phy_prog }}" data-id="{{ $row->id }}" data-field="phy_prog"></td>
       <td><input type="number" min="0" max="100" class="form-control form-control-sm" value="{{ $row->finan_prog }}" data-id="{{ $row->id }}" data-field="finan_prog"></td>
 
-      <td>
+     <!--  <td>
         <select class="form-control form-control-sm" data-id="{{ $row->id }}" data-field="gqgd">
+
+      <td><input style="width:90px;" type="number" min="0" max="100" class="form-control form-control-sm" value="{{ $row->phy_prog }}" data-id="{{ $row->id }}" data-field="phy_prog"></td>
+      <td><input style="width:90px;" type="number" min="0" max="100" class="form-control form-control-sm" value="{{ $row->finan_prog }}" data-id="{{ $row->id }}" data-field="finan_prog"></td> -->
+
+      <td>
+        <select style="width:90px;" class="form-control form-control-sm" data-id="{{ $row->id }}" data-field="gqgd">
+
           @foreach($yn as $k=>$v)<option value="{{ $k }}" {{ $row->gqgd===$k?'selected':'' }}>{{ $v }}</option>@endforeach
         </select>
       </td>
 
       <td>
-        <select class="form-control form-control-sm" data-id="{{ $row->id }}" data-field="pmo">
+
+        <select style="width:90px;" class="form-control form-control-sm" data-id="{{ $row->id }}" data-field="pmo">
+
           @foreach($yn as $k=>$v)<option value="{{ $k }}" {{ $row->pmo===$k?'selected':'' }}>{{ $v }}</option>@endforeach
         </select>
       </td>
 
       <td>
-        <select class="form-control form-control-sm" data-id="{{ $row->id }}" data-field="lc_location">
+
+        <select style="width:90px;" class="form-control form-control-sm" data-id="{{ $row->id }}" data-field="lc_location">
+
           @foreach($yn as $k=>$v)<option value="{{ $k }}" {{ $row->lc_location===$k?'selected':'' }}>{{ $v }}</option>@endforeach
         </select>
       </td>
 
       <td>
-  <select class="form-control form-control-sm"
+
+  <select style="width:90px;" class="form-control form-control-sm"
+
           data-id="{{ $row->id }}" data-field="target">
     @foreach($yn as $k => $v)
       <option value="{{ $k }}" {{ $row->target === $k ? 'selected' : '' }}>{{ $v }}</option>
@@ -205,18 +263,30 @@ thead{color:#000 !important;text-shadow:none !important;background:#bbcde5 !impo
 
       <td>
         <select class="form-control form-control-sm" data-id="{{ $row->id }}" data-field="target_rob">
+
+      <td><input style="width:90px;" class="form-control form-control-sm" value="{{ $row->tdc }}" data-id="{{ $row->id }}" data-field="tdc"></td>
+      <td><input style="width:90px;" class="form-control form-control-sm" value="{{ $row->tdc_fy }}" data-id="{{ $row->id }}" data-field="tdc_fy"></td>
+      <td><textarea style="width:90px;height: 33px;" class="form-control form-control-sm" value="{{ $row->brief_remarks }}" data-id="{{ $row->id }}" data-field="brief_remarks"></textarea></td>
+
+      <td>
+        <select style="width:90px;" class="form-control form-control-sm" data-id="{{ $row->id }}" data-field="target_rob">
+
           @foreach($yn as $k=>$v)<option value="{{ $k }}" {{ $row->target_rob===$k?'selected':'' }}>{{ $v }}</option>@endforeach
         </select>
       </td>
 
       <td>
-        <select class="form-control form-control-sm" data-id="{{ $row->id }}" data-field="target_rub">
+
+        <select style="width:90px;" class="form-control form-control-sm" data-id="{{ $row->id }}" data-field="target_rub">
+
           @foreach($yn as $k=>$v)<option value="{{ $k }}" {{ $row->target_rub===$k?'selected':'' }}>{{ $v }}</option>@endforeach
         </select>
       </td>
 
       <td>
-        <input type="date" class="form-control form-control-sm"
+
+        <input  type="date" class="form-control form-control-sm"
+
                value="{{ $row->completion_date ? \Carbon\Carbon::parse($row->completion_date)->format('Y-m-d') : '' }}"
                data-id="{{ $row->id }}" data-field="completion_date">
       </td>
@@ -228,7 +298,10 @@ thead{color:#000 !important;text-shadow:none !important;background:#bbcde5 !impo
       </td>
 
       <td>
-        <button type="button" value="{{ $row->id }}" class="btn btn-success updateData btn-sm px-3 shadow-sm">Update</button>
+
+        <button type="button" value="{{ $row->id }}"   class="btn btn-success updateData btn-xs px-2 shadow-sm" style="padding-top: 2px !important;
+    padding-bottom: 2px !important;">Update</button>
+
       </td>
 
       

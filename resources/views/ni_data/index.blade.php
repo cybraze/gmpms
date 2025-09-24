@@ -158,7 +158,6 @@ padding: 0rem 10px !important;
 .card-header {
 padding: 0.1rem 1rem !important;}
 
-
     .table>:not(caption)>*>* {
     padding: .0rem .5rem !important;
     background-color: var(--bs-table-bg);
@@ -187,7 +186,6 @@ padding: 0.1rem 1rem !important;}
 .table>thead {
     font-size: 13px !important;
 }
-
 </style>
 <div id="layoutSidenav_content">
 <main>
@@ -208,9 +206,9 @@ setTimeout(() => alertBox.remove(), 500); // 0.5s baad remove ho jaye
 </script>
 @endif
 
-<h4 class="mb-3 fw-bold text-left text-dark">
 
-Auto Signalling Project List 
+<h4 class="mb-3 fw-bold text-left text-dark">
+NI Data List 
 <button type="button" 
 class="btn btn-success btn-sm px-3 shadow-sm" 
 style="float:right;" 
@@ -218,10 +216,8 @@ data-bs-toggle="modal"
 data-bs-target="#addProjectModal">
 Add Project
 </button>
-
 </h4>
 <div id="flash-messages"></div>
-
 <form action="#" method="POST">
 @csrf
 <div class="table-responsive">
@@ -230,179 +226,122 @@ Add Project
 <tr>
 <th>#</th>
     <th style="text-align: left;">Division</th>
+    <th style="text-align: left;">Project Name</th>
+    <th style="text-align: left;">NI Stattion</th>
+    <th style="text-align: left;">Agency</th>
     <th style="text-align: left;">Section</th>
-    <th>Target(RKM)</th>
-    <th>Completed</th>
-    <th>Balance</th>
+    <th style="text-align: left;">Length Of Section</th>
+    <th style="text-align: left;">Proposed NI Month</th>
+    <th>Actual Date for Pre Ni From</th>
+    <th>Actual Date for Pre Ni To</th>
+    <th>Actual Date for Ni From</th>
+    <th>Actual Date for Ni To</th>
+    <th>CRS Inspaction Data</th>
+    <th>Is Commisioned</th>
+    <th>Remarks</th>
     <th>ESP</th>
     <th>SIP</th>
-    <th>RCC</th>
-    <th>SWR & SWRD</th>
-    <th>Interface</th>
-    <th>Application Logic</th>
-    <th>FAT</th>
-    <th>SAT</th>
-    <th>Tender</th>
-    <th>Indoor Progress(%)</th>
-    <th>Outdoor Progress(%)</th>
-    <th>GM Sanction</th>
-    <th>Is Commisioned</th>
+    <th>CRS Application</th>
     <th>TDC</th>
+    <th>CRS Sanction</th>
+    <th>Month Number</th>
+    <th>Is NI Comoleted</th>
     <th>Action</th>
     <th>Updated</th>
 </tr>
 </thead>
 <tbody>
-@foreach($projects as $row)
+@foreach($ni_data as $row)
 <tr>
     <td>{{ $loop->iteration }}</td>
     <td style="text-align: left;">{{ $row->division->code ?? '-' }}</td>
+    <td style="text-align: left;">{{ $row->project_name ?? '-' }}</td>
+    <td style="text-align: left;">{{ $row->station->name ?? '-' }}</td>
+    <td style="text-align: left;">{{ $row->agency->name ?? '-' }}</td>
     <td style="text-align: left;">{{ $row->section->name ?? '-' }}</td>
-    <td style="width: 1px"><input type="number" min="0" style="width:90px;" name="target_rkm" value="{{ $row->target_rkm }}" data-field="target_rkm" disabled></td>
-    <td style="width: 1px"><input type="number" min="0" style="width:100px;" name="completd_rkm" value="{{ $row->completed_rkm }}" oninput="updateBalance(this)" data-field="completed_rkm"></td>
-    <td style="width: 1px"><input type="number" min="0" style="width:100px;" name="balance_rkm" value="{{ $row->balance_rkm }}" data-field="balance_rkm" disabled></td>
-    <td style="width:100%;">
-        <select class="form-control status-dropdown" style="width:100px;padding: .175rem .75rem;"
-
+    <td style="text-align: left;">{{ $row->length_of_section_in_km ?? '-' }}</td>
+    <td style="text-align: left;">{{ $row->proposed_ni_month ?? '-' }}</td>
+    <td> <input type="date" 
+        class="form-control form-control-sm datepicker-field" 
+        value="{{ $row->for_pre_ni_from ? \Carbon\Carbon::parse($row->for_pre_ni_from)->format('Y-m-d') : '' }}" 
+        data-id="{{ $row->id }}" 
+        data-field="for_pre_ni_from"></td>
+    <td><input type="date" 
+        class="form-control form-control-sm datepicker-field" 
+        value="{{ $row->for_pre_ni_to ? \Carbon\Carbon::parse($row->for_pre_ni_to)->format('Y-m-d') : '' }}" 
+        data-id="{{ $row->id }}" 
+        data-field="for_pre_ni_to"></td>
+    <td><input type="date" 
+        class="form-control form-control-sm datepicker-field" 
+        value="{{ $row->for_ni_from ? \Carbon\Carbon::parse($row->for_ni_from)->format('Y-m-d') : '' }}" 
+        data-id="{{ $row->id }}" 
+        data-field="for_ni_from"></td>
+    <td><input type="date" 
+        class="form-control form-control-sm datepicker-field" 
+        value="{{ $row->for_ni_to ? \Carbon\Carbon::parse($row->for_ni_to)->format('Y-m-d') : '' }}" 
+        data-id="{{ $row->id }}" 
+        data-field="for_ni_to"></td>
+    <td><input type="date" 
+        class="form-control form-control-sm datepicker-field" 
+        value="{{ $row->crs_inspection_date ? \Carbon\Carbon::parse($row->crs_inspection_date)->format('Y-m-d') : '' }}" 
+        data-id="{{ $row->id }}" 
+        data-field="crs_inspection_date"></td>
+    <td> <select class="form-control status-dropdown" style="width:150px;padding: .175rem .75rem;"
+        data-id="{{ $row->id }}" 
+        data-field="is_commisioned">
+            <option value="0" {{ $row->is_commissioned == 0 ? 'selected' : '' }}>No</option>
+            <option value="1" {{ $row->is_commissioned == 1 ? 'selected' : '' }}>Yes</option>
+        </select></td>
+    <td><textarea name="remarks[{{ $row->id }}]" style="width:150px;padding: .175rem .75rem;"
+      class="form-control form-control-sm" 
+      rows="2" 
+      placeholder="Enter remark" data-field="remarks">{{ $row->remarks ?? '' }}</textarea></td>
+    <td><select class="form-control status-dropdown" style="width:100px;padding: .175rem .75rem;"
         data-id="{{ $row->id }}"
         data-field="esp_status">
-        <option value="0" {{ $row->esp_status == 0 || is_null($row->esp_status) ? 'selected' : '' }}>Pending</option>
-        <option value="1" {{ $row->esp_status == 1 ? 'selected' : '' }}>Approved</option>
-        </select>
-    </td>
-
-    <td>
-        <select class="form-control status-dropdown"  style="width:100px;padding: .175rem .75rem;"
-
-        data-id="{{ $row->id }}" 
+        <option value="0" {{ $row->esp_status == 0 || is_null($row->esp_status) ? 'selected' : '' }}>No</option>
+        <option value="1" {{ $row->esp_status == 1 ? 'selected' : '' }}>Yes</option>
+        </select></td>
+    <td><select class="form-control status-dropdown" style="width:100px;padding: .175rem .75rem;"
+        data-id="{{ $row->id }}"
         data-field="sip_status">
-            <option value="0" {{ $row->sip_status == 0 ? 'selected' : '' }}>Pending</option>
-            <option value="1" {{ $row->sip_status == 1 ? 'selected' : '' }}>Approved</option>
-        </select>
-    </td>
-    <td>
-
-        <select class="form-control status-dropdown" style="width:100px;padding: .175rem .75rem;"
-        data-id="{{ $row->id }}" 
-        data-field="rcc_status">
-        <option value="0" {{ $row->rcc_status == 0 ? 'selected' : '' }}>Pending</option>
-        <option value="1" {{ $row->rcc_status == 1 ? 'selected' : '' }}>Approved</option>
-        <!--<option value="2" {{ $row->rcc_status == 2 ? 'selected' : '' }}>Submitted</option>-->
-        </select>
-    </td>
-    <td>
-        <select class="form-control status-dropdown" style="width:100px;padding: .175rem .75rem;"
-
-        data-id="{{ $row->id }}" 
-        data-field="swr_status">
-        <option value="0" {{ $row->swr_status == 0 ? 'selected' : '' }}>Pending</option>
-        <option value="1" {{ $row->swr_status == 1 ? 'selected' : '' }}>Approved</option>
-        </select>
-    </td>
-    <td>
-
-        <select class="form-control status-dropdown" style="width:100px;padding: .175rem .75rem;"
-        data-id="{{ $row->id }}" 
-        data-field="interface_status">
-            <option value="0" {{ $row->interface_status == 0 ? 'selected' : '' }}>Pending</option>
-            <option value="1" {{ $row->interface_status == 1 ? 'selected' : '' }}>Approved</option>
-        </select>
-    </td>
-    <td>
-        <select class="form-control status-dropdown" style="width:100px;padding: .175rem .75rem;"
-        data-id="{{ $row->id }}" 
-        data-field="app_logc_status">
-            <option value="0" {{ $row->app_logic_status == 0 ? 'selected' : '' }}>Pending</option>
-            <option value="1" {{ $row->app_logic_status == 1 ? 'selected' : '' }}>Approved</option>
-        </select>
-    </td>
-     <td>
-        <select class="form-control status-dropdown" style="width:100px;padding: .175rem .75rem;"
-        data-id="{{ $row->id }}" 
-        data-field="fat_status">
-            <option value="0" {{ $row->fat_status == 0 ? 'selected' : '' }}>Pending</option>
-            <option value="1" {{ $row->fat_status == 1 ? 'selected' : '' }}>Completed</option>
-        </select>
-    </td>
-     <td>
-        <select class="form-control status-dropdown" style="width:100px;padding: .175rem .75rem;"
-        data-id="{{ $row->id }}" 
-        data-field="sat_status">
-            <option value="0" {{ $row->sat_status == 0 ? 'selected' : '' }}>Pending</option>
-            <option value="1" {{ $row->sat_status == 1 ? 'selected' : '' }}>Completed</option>
-        </select>
-    </td>
-        <td>
-        <select class="form-control status-dropdown" style="width:100px;padding: .175rem .75rem;"
-        data-id="{{ $row->id }}" 
-        data-field="tender_status">
-            <option value="0" {{ $row->tender_status == 0 ? 'selected' : '' }}>Not Awarded</option>
-
-            <option value="1" {{ $row->tender_status == 1 ? 'selected' : '' }}>Awarded</option>
-        </select>
-    </td>
-    <td>
-    <select name="indoor_progress"
-
-            class="form-control form-control-sm progress-dropdown" style="width:100px;padding: .175rem .75rem;"
-
-            data-id="{{ $row->id }}" 
-            data-field="indoor_progress_pct">
-        @for($i = 0; $i <= 100; $i += 1) 
-            <option value="{{ $i }}" {{ $row->indoor_progress_pct == $i ? 'selected' : '' }}>
-                {{ $i }}%
-            </option>
-        @endfor
-    </select>
-</td>
-    <td>
-
-        <select name="outdoor_progress"  style="width:100px;padding: .175rem .75rem;"
-
-        class="form-control form-control-sm progress-dropdown" 
-        data-id="{{ $row->id }}" 
-        data-field="outdoor_progress_pct">
-        @for($i = 0; $i <= 100; $i += 1)
-        <option value="{{ $i }}" {{ $row->outdoor_progress_pct == $i ? 'selected' : '' }}>
-        {{ $i }}%
-        </option>
-        @endfor
-        </select>
-    </td>
-      <td>
-
-        <select class="form-control status-dropdown" style="width:150px;padding: .175rem .75rem;"
-        data-id="{{ $row->id }}" 
-        data-field="gm_sanction_status">
-            <option value="0" {{ $row->gm_sanction_status == 0 ? 'selected' : '' }}>Not obtained</option>
-            <option value="1" {{ $row->gm_sanction_status == 1 ? 'selected' : '' }}>Obtained</option>
-        </select>
-    </td>
-    <td>
-        <select class="form-control status-dropdown" style="width:150px;padding: .175rem .75rem;"
-        data-id="{{ $row->id }}" 
-        data-field="is_commisioned_status">
-            <option value="0" {{ $row->is_commisioned == 0 ? 'selected' : '' }}>No</option>
-            <option value="1" {{ $row->is_commisioned == 1 ? 'selected' : '' }}>Yes</option>
-
-        </select>
-    </td>
-    <td>
-        <input type="date" 
+        <option value="0" {{ $row->sip_status == 0 || is_null($row->sip_status) ? 'selected' : '' }}>No</option>
+        <option value="1" {{ $row->sip_status == 1 ? 'selected' : '' }}>Yes</option>
+        </select></td>  
+    <td><select class="form-control status-dropdown" style="width:100px;padding: .175rem .75rem;"
+        data-id="{{ $row->id }}"
+        data-field="crs_application_status">
+        <option value="0" {{ $row->crs_application_status == 0 || is_null($row->crs_application_status) ? 'selected' : '' }}>No</option>
+        <option value="1" {{ $row->crs_application_status == 1 ? 'selected' : '' }}>Yes</option>
+        </select></td>
+    <td><input type="date" 
         class="form-control form-control-sm datepicker-field" 
-        value="{{ $row->tds_target ? \Carbon\Carbon::parse($row->tdc_target)->format('Y-m-d') : '' }}" 
+        value="{{ $row->crs_tdc ? \Carbon\Carbon::parse($row->crs_tdc)->format('Y-m-d') : '' }}" 
         data-id="{{ $row->id }}" 
-        data-field="tds_target">
+        data-field="crs_tdc"></td>
+    <td><select class="form-control status-dropdown" style="width:100px;padding: .175rem .75rem;"
+        data-id="{{ $row->id }}"
+        data-field="crs_sanction_status">
+        <option value="0" {{ $row->crs_sanction_status == 0 || is_null($row->crs_sanction_status) ? 'selected' : '' }}>No</option>
+        <option value="1" {{ $row->crs_sanction_status == 1 ? 'selected' : '' }}>Yes</option>
+        </select></td>
+    <td><input type="number" min="0" style="width:90px;" name="month_number" value="{{ $row->month_number }}" data-field="month_number" ></td>
+    <td>   
+        <select class="form-control status-dropdown" style="width:100px;padding: .175rem .75rem;"
+        data-id="{{ $row->id }}"
+        data-field="ni_status">
+        <option value="0" {{ $row->ni_status == 0 || is_null($row->ni_status) ? 'selected' : '' }}>No</option>
+        <option value="1" {{ $row->ni_status == 1 ? 'selected' : '' }}>Yes</option>
+        </select>
     </td>
+  
 
     <td>
         <button type="button" 
         name="scope_id" 
         value="{{ $row->id }}" 
-
            class="btn btn-success updateData btn-xs px-2 shadow-sm" style="padding-top: 2px !important;
     padding-bottom: 2px !important;">
-
         Update
         </button>
     </td>
@@ -415,28 +354,14 @@ data-id="{{ $row->id }}">
 </a>
 </td>
 </tr>
-
 <tr class="d-none update-alert-row" id="alert-row-{{ $row->id }}">
     <td colspan="25">
         <div class="update-alert alert alert-success py-1 px-2 my-1 mb-0 text-end"></div>
-
     </td>
 </tr>   
 
 @endforeach
-@php
-    $totalTarget = $projects->sum('target_rkm');
-    $totalCompleted = $projects->sum('completed_rkm');
-    $totalBalance = $projects->sum('balance_rkm');
-@endphp
 
-<tr class="table-primary fw-bold">
-    <td colspan="3" class="text-end">Total:</td>
-    <td>{{ $totalTarget }}</td>
-    <td>{{ $totalCompleted }}</td>
-    <td>{{ $totalBalance }}</td>
-    <td colspan="15"></td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -481,12 +406,11 @@ data-id="{{ $row->id }}">
       </div>
       
       <!-- Form -->
-      <form id="addProjectForm" action="{{ route('auto_signal.store') }}" method="POST">
+      <form id="addProjectForm" action="{{ route('ni_data.store') }}" method="POST">
         @csrf
         <div class="modal-body p-4">
 
           <!-- Station -->
-
             <div class="mb-3">
                 <label for="division" class="form-label fw-semibold">Select Division</label>
                 <select name="division_id" id="division" class="form-select border-primary" required>
@@ -496,36 +420,49 @@ data-id="{{ $row->id }}">
                 @endforeach
                 </select>
             </div>
-
-
-          <!-- Plan Head -->
-        <div class="mb-3">
-        <label for="section" class="form-label fw-semibold">Select Section</label>
-        <select name="section_id" id="section" class="form-select border-primary" required>
-        <option value="">-- Select Section --</option>
-        <!-- Will be filled dynamically -->
-        </select>
-        </div>
-
-          <!-- Work Type -->
-          <div class="mb-3">
-            <label for="target_year" class="form-label fw-semibold">Work Year</label>
-            <select name="target_year" id="target_year" class="form-select border-primary" required>
-              <option>-- Select Work Year --</option>
-              <option value="2021-22">2021-22</option>
-              <option value="2022-23">2022-23</option>
-              <option value="2023-24">2023-24</option>
-              <option value="2024-25">2024-25</option>
-              <option value="2025-26">2025-26</option>
+            <div class="mb-3">
+            <label for="project_name" class="form-label fw-semibold">Project Name</label>
+            <input type="text" name="project_name" id="project_name" class="form-control border-primary" value=""  required>
+            </div>
+            <div class="mb-3">
+                <label for="station" class="form-label fw-semibold">Select Station</label>
+                <select name="station_id" id="station" class="form-select border-primary" required>
+                <option value="">-- Select Station--</option>
+                @foreach($station as $stations)
+                <option value="{{ $stations->id }}">{{ $stations->name }}</option>
+                @endforeach
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="division" class="form-label fw-semibold">Select Agency</label>
+                <select name="agency_id" id="agency_id" class="form-select border-primary" required>
+                <option value="">-- Select Agency--</option>
+                @foreach($agency as $agencydata)
+                <option value="{{ $agencydata->id }}">{{ $agencydata->name }}</option>
+                @endforeach
+                </select>
+            </div>
+            <!-- Plan Head -->
+            <div class="mb-3">
+            <label for="section" class="form-label fw-semibold">Select Section</label>
+            <select name="section_id" id="section" class="form-select border-primary" required>
+            <option value="">-- Select Section --</option>
+            <!-- Will be filled dynamically -->
             </select>
-          </div>
-     
-        <div class="mb-3">
-        <label for="section" class="form-label fw-semibold">Target(RKM)</label>
-        <input type="number" name="target_rkm" id="target_rkm" class="form-select border-primary" value="0" min="0" required>
-         </div>
-        </div>
+            </div>
+            <div class="mb-3">
+            <label for="section" class="form-label fw-semibold">Length Of Section</label>
+            <input type="number" name="length_of_section" id="length_of_section" class="form-control border-primary"  min="0" required>
+            </div>
 
+            <div class="mb-3">
+            <label for="section" class="form-label fw-semibold">Proposed NI Month</label>
+            <input type="date" name="proposed_ni_month"
+            class="form-control form-control-sm datepicker-field"  
+            data-id="{{ $row->id }}" 
+            data-field="proposed_ni_month">
+            </div>
+            </div>
         <!-- Footer -->
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">
@@ -625,7 +562,6 @@ $(document).on('submit', '#addProjectForm', function(e) {
         data: formData,
         success: function(response) {
             if (response.success) {
-
                 let messageBox = `
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                 ${response.message}
@@ -633,7 +569,6 @@ $(document).on('submit', '#addProjectForm', function(e) {
                 </div>`;
                 $('#flash-messages').html(messageBox); // put inside a div with id="flash-messages"
                 //alert(response.message);
-
 
                 // Close modal
                 $('#addProjectModal').modal('hide');
@@ -671,7 +606,7 @@ $(document).ready(function() {
     e.preventDefault();
 
     const projectId = $(this).data('id');
-    const url = "{{ url('/auto_signal_projects') }}/" + projectId + "/history";
+    const url = "{{ url('/ni_data') }}/" + projectId + "/history";
 
     // show loader
     $('#historyModalBody').html('<p class="text-center text-muted">Loading...</p>');
@@ -707,29 +642,25 @@ $(document).on("click", ".updateData", function () {
     let data = {
         id: projectId,
         _token: "{{ csrf_token() }}",
-        target_rkm: row.find("[data-field='target_rkm']").val(),
-        completed_rkm: row.find("[data-field='completed_rkm']").val(),
-        balance_rkm: row.find("[data-field='balance_rkm']").val(),
-        interface_status: row.find("[data-field='interface_status']").val(),
-        rcc_status: row.find("[data-field='rcc_status']").val(),
-        swr_status: row.find("[data-field='swr_status']").val(),
-        app_logic_status: row.find("[data-field='app_logic_status']").val(),
+        for_pre_ni_from: row.find("[data-field='for_pre_ni_from']").val(),
+        for_pre_ni_to: row.find("[data-field='for_pre_ni_to']").val(),
+        for_ni_from: row.find("[data-field='for_ni_from']").val(),
+        for_ni_to: row.find("[data-field='for_ni_to']").val(),
+        crs_inspection_date: row.find("[data-field='crs_inspection_date']").val(),
+        is_commisioned: row.find("[data-field='is_commisioned']").val(),
+        remarks: row.find("[data-field='remarks']").val(),
         esp_status: row.find("[data-field='esp_status']").val(),
         sip_status: row.find("[data-field='sip_status']").val(),
-        fat_status: row.find("[data-field='fat_status']").val(),
-        sat_status: row.find("[data-field='sat_status']").val(),
-        gm_sanction_status: row.find("[data-field='gm_sanction_status']").val(),
-        indoor_progress_pct: row.find("[data-field='indoor_progress_pct']").val(),
-        outdoor_progress_pct: row.find("[data-field='outdoor_progress_pct']").val(),
-        tender_status: row.find("[data-field='tender_status']").val(),
-
-        is_commisioned: row.find("[data-field='is_commisioned_status']").val(),
-
-        tdc_target: row.find("[data-field='tdc_target']").val(),
+        crs_application_status: row.find("[data-field='crs_application_status']").val(),
+        crs_tdc: row.find("[data-field='crs_tdc']").val(),
+        crs_sanction_status: row.find("[data-field='crs_sanction_status']").val(),
+        month_number: row.find("[data-field='month_number']").val(),
+        ni_status: row.find("[data-field='ni_status']").val(),
+  
     };
 
     $.ajax({
-        url: "{{ route('autosignal.updateField') }}", // your route
+        url: "{{ route('ni_data.updateField') }}", // your route
         method: "POST",
         data: data,
         success: function (res) {
@@ -750,8 +681,6 @@ $(document).on("click", ".updateData", function () {
 });
 </script>
 <script>
-<<<<<<< HEAD
-=======
 document.getElementById('division').addEventListener('change', function () {
     let divisionId = this.value;
     let sectionSelect = document.getElementById('section');
@@ -807,7 +736,6 @@ function updateBalance(input) {
 }
 </script>
 <script>
->>>>>>> master
     $(document).ready(function() {
         $('.progress-dropdown').select2({
             width: '100%',  // ensures it adapts to your container width

@@ -29,6 +29,10 @@ use App\Models\LocoKavachSectionHistory;
 use App\Models\KavachTrainingSectionHistory;
 use Illuminate\Support\Facades\DB;
 
+use App\Models\ProjectAutoSignaling;
+use App\Models\MasterKavachItem;
+use App\Models\KavachTenderData;
+use App\Models\KavachTenderHistory;
 
 class UserController extends Controller
 {
@@ -56,9 +60,38 @@ class UserController extends Controller
         ]);
     }
 
+
+
+    public function kavach_works_dashboard(){
+
+        return view('kavach_works_dashboard');
+    }
+    public function ei_works_dashboard(){
+        return view('ei_works_dashboard');
+    }
+    public function auto_signaling_dashboard(){
+        return view('auto_signaling_dashboard');
+    }
+    public function rob_rub_dashboard(){
+        return view('rob_rub_dashboard');
+    }
+
     public function home()
     {
-        return view('home');
+        $totalTargetRkm = ProjectAutoSignaling::where('target_year', '2025-26')
+            ->sum('target_rkm');
+            
+        // Total RKM where FAT Completed (fat_status = 1)
+        $totalFatCompletedRkm = ProjectAutoSignaling::where('target_year', '2025-26')
+            ->where('fat_status', 1)
+            ->sum('target_rkm');
+        $totalSatCompletedRkm = ProjectAutoSignaling::where('target_year', '2025-26')
+            ->where('sat_status', 1)
+            ->sum('target_rkm');
+        
+        
+        return view('home', compact('totalTargetRkm','totalFatCompletedRkm','totalSatCompletedRkm'));
+
     }
 
  public function create_new_project()
@@ -143,10 +176,22 @@ public function object_details($id)
 
 public function section_target_details($id)
 {
+
+
     $sections = MasterKavachSection::all();
-    $data = GkSectionData::with('section')->get();
-    $towerdata = TowerSectionData::with('section')->get();
-    $ofcdata = OfcSectionData::with('section')->get();
+
+    $data = GkSectionData::with('section')
+            ->where('new_project_id', $id)
+            ->get();
+
+$towerdata = TowerSectionData::with('section')
+            ->where('new_project_id', $id)
+            ->get();
+
+$ofcdata = OfcSectionData::with('section')
+            ->where('new_project_id', $id)
+            ->get();
+
 // 👇 Map of section_id => section_name
     $sectionsMap = MasterKavachSection::pluck('section_name', 'id')->toArray();
 
@@ -467,10 +512,125 @@ public function loco_kavach_details($id)
     $sections = LocoShedHoldingMaster::all();
 
     // relation ke sath kavach data
-    $locodata = SectionLocoKavach::with(['shed'])->get();
+
+    $locodata = SectionLocoKavach::with(['shed'])
+                ->where('new_project_id', $id)
+                ->get();
     return view('loco_kavach_details', compact('sections','locodata','id'));
 }
+public function tender_status_details($id){
 
+    $tenderData = KavachTenderData::with(['item', 'section', 'project'])->get();
+    $sections = MasterKavachSection::all();
+    $item = MasterKavachItem::all();
+
+    return view('kavach_tender.index', compact('tenderData','sections','item','id'));
+
+}
+public function kavach_tender_status_store(Request $request){
+     $request->validate([
+        'item_id' => 'required|exists:divisions,id',
+        'project_id' => 'required|exists:auto_signal_section,id',
+        'section_id' => 'required',
+        'tender_status' => 'required',
+
+        ]);
+
+
+        $kavach_tender = KavachTenderData::create([
+            'kavach_item_id' => $request->item_id,
+            'kavach_section_id' => $request->section_id,
+            'new_project_id' => $request->project_id,
+            'tender_status' => $request->tender_status,
+ 
+        ]);
+       KavachTenderHistory::create([
+        'kavach_tender_id'   => $kavach_tender->id,
+        'snapshot_json'=> json_encode($kavach_tender->toArray()),
+        'changed_by'   => auth()->id(),
+        'changed_at'   => now(),
+        ]);
+
+        if ($request->ajax()) {
+        return response()->json(['success' => true, 'message' => 'Tender Status added successfully!', 'data' => $kavach_tender]);
+        }
+
+        return redirect()->back()->with('success', 'Auto Signal Project added successfully!');
+}
+
+public function kavach_tender_status_update(Request $request){
+
+    $project = KavachTenderData::findOrFail($request->id);
+    // Loop through only the fields you allow
+    $allowed = [
+        'nit_date',
+        'tender_opening_date',
+        'loa_date',
+        'remarks',
+        'updated_on',
+    ];
+
+    foreach ($allowed as $field) {
+        if ($request->has($field)) {
+            $project->{$field} = $request->$field;
+        }
+    }
+
+    $project->save();
+
+    KavachTenderHistory::create([
+    'kavach_tender_id'   =>$project->id,
+    'snapshot_json'=> json_encode($project->toArray()),
+    'changed_by'   => auth()->id(),
+    'changed_at'   => now(),
+    ]);
+
+    return response()->json([
+    'success' => true,
+    'id' => $project->id,
+    'message' => 'Tender Status updated successfully!'
+    ]);
+
+
+
+}
+
+public function tender_history($id)
+{
+    // Get tender data with relationships
+    $tenderData = KavachTenderData::with(['item', 'section', 'project'])->findOrFail($id);
+
+    // Fetch related histories
+    $histories = $tenderData->histories()->latest('changed_at')->get();
+
+    // Lookup data
+    $sections = MasterKavachSection::pluck('section_name', 'id')->toArray();
+    $items    = MasterKavachItem::pluck('name', 'id')->toArray();
+    $projects = NewProject::pluck('project_name', 'id')->toArray();
+
+    // Replace IDs with names in snapshot
+    $histories->transform(function ($history) use ($sections, $items, $projects) {
+        $snapshot = json_decode($history->snapshot_json, true);
+
+        if (isset($snapshot['kavach_section_id'])) {
+            $snapshot['section'] = $sections[$snapshot['kavach_section_id']] ?? $snapshot['kavach_section_id'];
+        }
+        if (isset($snapshot['kavach_item_id'])) {
+            $snapshot['item'] = $items[$snapshot['kavach_item_id']] ?? $snapshot['kavach_item_id'];
+        }
+        if (isset($snapshot['new_project_id'])) {
+            $snapshot['project'] = $projects[$snapshot['new_project_id']] ?? $snapshot['new_project_id'];
+        }
+
+        $history->snapshot_array = $snapshot; // attach for blade
+        return $history;
+    });
+
+    // Render HTML
+    $html = view('kavach_tender.history', compact('tenderData', 'histories'))->render();
+
+    return response()->json(['success' => true, 'html' => $html]);
+}
 
 
 
@@ -553,17 +713,23 @@ public function getLocoKavachHistory($id)
 
 
 public function training_section_details($id)
-{  $dept1 = KavachTrainingSection::with('staff')
-                ->whereHas('staff', fn($q) => $q->where('dept_id', 1))
-                ->get();
 
-    $dept2 = KavachTrainingSection::with('staff')
-                ->whereHas('staff', fn($q) => $q->where('dept_id', 2))
-                ->get();
+{ $dept1 = KavachTrainingSection::with('staff')
+            ->where('new_project_id', $id)
+            ->whereHas('staff', fn($q) => $q->where('dept_id', 1))
+            ->get();
 
-    $dept3 = KavachTrainingSection::with('staff')
-                ->whereHas('staff', fn($q) => $q->where('dept_id', 3))
-                ->get();
+$dept2 = KavachTrainingSection::with('staff')
+            ->where('new_project_id', $id)
+            ->whereHas('staff', fn($q) => $q->where('dept_id', 2))
+            ->get();
+
+$dept3 = KavachTrainingSection::with('staff')
+            ->where('new_project_id', $id)
+            ->whereHas('staff', fn($q) => $q->where('dept_id', 3))
+            ->get();
+
+
       $departments = \App\Models\DepartmentMaster::orderBy('staff_dept')->get();
 
     return view('training_section_details', compact('id','departments','dept1','dept2','dept3'));

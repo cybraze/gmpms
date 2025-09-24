@@ -157,6 +157,35 @@ padding: 0rem 10px !important;
 }
 .card-header {
 padding: 0.1rem 1rem !important;}
+.table>:not(caption)>*>* {
+    padding: .0rem .5rem !important;
+    background-color: var(--bs-table-bg);
+    border-bottom-width: 1px;
+    box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
+}
+
+.nowrap {
+  white-space: nowrap;       /* ðŸ‘ˆ break hone se rokega */
+  overflow: hidden;          /* optional */
+  text-overflow: ellipsis;   /* optional ... dikhayega */
+  max-width: 200px;          /* ðŸ‘ˆ apni marzi se set karo */
+}
+
+.btn-xs {
+  font-size: 11px;    /* font chhota */
+  padding: 2px 6px;   /* button ki height/width chhoti */
+  line-height: 1.2;
+}
+
+
+.table>tbody {
+    font-size: 13px !important;
+}
+
+.table>thead {
+    font-size: 13px !important;
+}
+
 </style>
 <div id="layoutSidenav_content">
 <main>
@@ -178,7 +207,8 @@ setTimeout(() => alertBox.remove(), 500); // 0.5s baad remove ho jaye
 @endif
 
 
-<h3 class="mb-3 fw-bold text-left text-dark">
+<h4 class="mb-3 fw-bold text-left text-dark">
+
 EI WORKS Project List 
 <button type="button" 
 class="btn btn-success btn-sm px-3 shadow-sm" 
@@ -187,7 +217,9 @@ data-bs-toggle="modal"
 data-bs-target="#addProjectModal">
 Add Project
 </button>
-</h3>
+
+</h4>
+
 
 <form action="#" method="POST">
 @csrf
@@ -204,6 +236,7 @@ Add Project
     <th>SIP</th>
     <th>CRS Sanction</th>
     <th>Building/TDC</th>
+    <th>Is Commisioned</th>
     <th>Indoor Progress(%)</th>
     <th>Outdoor Progress(%)</th>
     <th>TDC</th>
@@ -220,15 +253,20 @@ Add Project
     <td style="text-align: left;">{{ $row->planHead->code ?? '-' }}</td>
     <td style="text-align: left;">{{ $row->work_type }}</td>
     <td>
-        <select class="form-control status-dropdown" 
+
+        <select class="form-control status-dropdown"  style="width:130px;padding: .175rem .75rem;"
         data-id="{{ $row->id }}" 
         data-field="tender_status">
-            <option value="0" {{ $row->tender_status == 0 ? 'selected' : '' }}>Pending</option>
+            <option value="0" {{ $row->tender_status == 0 ? 'selected' : '' }}>Not Awarded</option>
+
             <option value="1" {{ $row->tender_status == 1 ? 'selected' : '' }}>Awarded</option>
         </select>
     </td>
     <td>
-        <select class="form-control status-dropdown"
+
+
+        <select class="form-control status-dropdown" style="width:100px;padding: .175rem .75rem;"
+
         data-id="{{ $row->id }}"
         data-field="esp_status">
         <option value="0" {{ $row->esp_status == 0 || is_null($row->esp_status) ? 'selected' : '' }}>Pending</option>
@@ -237,7 +275,9 @@ Add Project
     </td>
 
     <td>
-        <select class="form-control status-dropdown" 
+
+        <select class="form-control status-dropdown"  style="width:100px;padding: .175rem .75rem;"
+
         data-id="{{ $row->id }}" 
         data-field="sip_status">
             <option value="0" {{ $row->sip_status == 0 ? 'selected' : '' }}>Pending</option>
@@ -245,11 +285,14 @@ Add Project
         </select>
     </td>
     <td>
-        <select class="form-control status-dropdown" 
+
+        <select class="form-control status-dropdown" style="width:100px;padding: .175rem .75rem;"
+
         data-id="{{ $row->id }}" 
         data-field="crs_status">
         <option value="0" {{ $row->crs_status == 0 ? 'selected' : '' }}>Pending</option>
         <option value="1" {{ $row->crs_status == 1 ? 'selected' : '' }}>Obtained</option>
+
         <option value="2" {{ $row->crs_status == 2 ? 'selected' : '' }}>Submitted</option>
         </select>
     </td>
@@ -259,6 +302,25 @@ Add Project
         data-field="building_status">
         <option value="0" {{ $row->building_status == 0 ? 'selected' : '' }}>Pending</option>
         <option value="1" {{ $row->building_status == 1 ? 'selected' : '' }}>Approved</option>
+
+        <!--<option value="2" {{ $row->crs_status == 2 ? 'selected' : '' }}>Submitted</option>-->
+        </select>
+    </td>
+    <td>
+        <select class="form-control status-dropdown" style="width:130px;padding: .175rem .75rem;"
+        data-id="{{ $row->id }}" 
+        data-field="building_status">
+        <option value="0" {{ $row->building_status == 0 ? 'selected' : '' }}>Completed</option>
+        <option value="1" {{ $row->building_status == 1 ? 'selected' : '' }}>Not Completed</option>
+        </select>
+    </td>
+    <td>
+        <select class="form-control status-dropdown" style="width:150px;padding: .175rem .75rem;"
+        data-id="{{ $row->id }}" 
+        data-field="is_commisioned_status">
+            <option value="0" {{ $row->is_commisioned == 0 ? 'selected' : '' }}>No</option>
+            <option value="1" {{ $row->is_commisioned == 1 ? 'selected' : '' }}>Yes</option>
+
         </select>
     </td>
 
@@ -298,7 +360,10 @@ Add Project
         <button type="button" 
         name="scope_id" 
         value="{{ $row->id }}" 
-        class="btn btn-success updateData btn-sm px-3 shadow-sm">
+
+         class="btn btn-success updateData btn-xs px-2 shadow-sm" style="padding-top: 2px !important;
+    padding-bottom: 2px !important;">
+
         Update
         </button>
     </td>
@@ -308,7 +373,9 @@ Add Project
 class="view-history-btn"
 data-id="{{ $row->id }}"
 data-history='@json($row->history)'>
-{{ \Carbon\Carbon::parse($row->changed_at)->timezone('Asia/Kolkata')->format('d-M-Y H:i') }}
+
+{{ \Carbon\Carbon::parse($row->changed_at)->timezone('Asia/Kolkata')->format('d-M-Y') }}
+
 </a>
 </td>
 </tr>
@@ -598,6 +665,9 @@ $(document).on("click", ".updateData", function () {
         indoor_progress_pct: row.find("[data-field='indoor_progress_pct']").val(),
         outdoor_progress_pct: row.find("[data-field='outdoor_progress_pct']").val(),
         tds_target: row.find("[data-field='tds_target']").val(),
+
+        is_commisioned: row.find("[data-field='is_commisioned_status']").val(),
+
     };
 
     $.ajax({

@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GM - PROGRESS MONITORING SYSTEM - BILASPUR (S.E.C.R.)</title>
+
+  <title>GM - PROGRESS MONITORING SYSTEM - Headquarter (S.E.C.R.)</title>
+
         <link rel="icon" href="{{ asset('assets/admin_css/img/indian.png') }}" type="image/x-icon">
 
   <!-- Bootstrap 5 -->

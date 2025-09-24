@@ -1,4 +1,4 @@
-@include('includes.header')
+ @include('includes.header')
  <!-- Bootstrap Icons CDN -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 <!-- Bootstrap 5 CSS -->
@@ -181,31 +181,17 @@ canvas {
     <h4 class="fw-bold text-uppercase d-flex align-items-center" 
         style="color:#2c3e50; letter-spacing:1px;">
       <i class="bi bi-speedometer2 me-2 text-primary"></i> 
-<<<<<<< HEAD
-      Railway Signalling Work Dashboard
-=======
-      SECR Work Dashboard
->>>>>>> master
+      RAILWAY SIGNALING WORK DASHBOARD
     </h4>
   </div>
       <!-- Approved Contracts -->
 <div class="col-md-6 col-xl-3">
-<<<<<<< HEAD
   <a href="#" class="text-decoration-none text-dark">
     <div class="dashboard-card card-purple text-center">
       <div class="icon-box"><i class="bi bi-graph-up-arrow"></i></div>
       <div>
         <h6 class="card-title mb-1" style="text-align:left;">Total RKM <br>Target 2024-2025</h6>
-        <h4 class="fw-bold text-light" style="text-align:left;">276</h4>
-=======
-  <a href="{{route('kavach_works_dashboard')}}" class="text-decoration-none text-dark">
-    <div class="dashboard-card card-purple text-center">
-      <div class="icon-box"><i class="bi bi-graph-up-arrow"></i></div>
-      <div>
-     
-        <h6 class="card-title mb-1" style="text-align:left;">KAVACH Works </h6>
-        <h4 class="fw-bold text-light" style="text-align:left;">{{$totalTargetRkm}}</h4>
->>>>>>> master
+        <h4 class="fw-bold text-light" style="text-align:left;">245</h4>
       </div>
     </div>
   </a>
@@ -213,7 +199,6 @@ canvas {
 
 
 <div class="col-md-6 col-xl-3">
-<<<<<<< HEAD
   <a href="#" class="text-decoration-none text-dark">
     <div class="dashboard-card card-blue text-center">
       <div class="icon-box"><i class="bi bi-alarm-fill"></i></div>
@@ -231,50 +216,19 @@ canvas {
       <div class="icon-box"><i class="bi bi-alarm-fill"></i></div>
       <div>
         <h6 class="card-title mb-1" style="text-align:left;">Total RKM <br>Where FAT Completed</h6>
-        <h4 class="fw-bold text-light" style="text-align:left;">9</h4>
-=======
-  <a href="{{route('ei_works_dashboard')}}" class="text-decoration-none text-dark">
-    <div class="dashboard-card card-blue text-center">
-      <div class="icon-box"><i class="bi bi-alarm-fill"></i></div>
-      <div>
-      
-        <h6 class="card-title mb-1" style="text-align:left;">EI Works</h6>
-        <h4 class="fw-bold text-light" style="text-align:left;">65</h4>
-      </a>
-      </div>
-    </div>
-  
-</div>
-
-<div class="col-md-6 col-xl-3">
-  <a href="{{route('auto_signaling_dashboard')}}" class="text-decoration-none text-dark">
-    <div class="dashboard-card card-green text-center">
-      <div class="icon-box"><i class="bi bi-alarm-fill"></i></div>
-      <div>
-        <h6 class="card-title mb-1" style="text-align:left;">Auto Signaling</h6>
-        <h4 class="fw-bold text-light" style="text-align:left;">{{$totalFatCompletedRkm}}</h4>
->>>>>>> master
+        <h4 class="fw-bold text-light" style="text-align:left;">245</h4>
       </div>
     </div>
   </a>
 </div>
 
 <div class="col-md-6 col-xl-3">
-<<<<<<< HEAD
   <a href="#" class="text-decoration-none text-dark">
     <div class="dashboard-card card-orange text-center">
       <div class="icon-box"><i class="bi bi-alarm-fill"></i></div>
       <div>
         <h6 class="card-title mb-1" style="text-align:left;">Total RKM <br>Where SAT Completed</h6>
-        <h4 class="fw-bold text-light" style="text-align:left;">9</h4>
-=======
-  <a href="{{route('rob_rub_dashboard')}}" class="text-decoration-none text-dark">
-    <div class="dashboard-card card-orange text-center">
-      <div class="icon-box"><i class="bi bi-alarm-fill"></i></div>
-      <div>
-        <h6 class="card-title mb-1" style="text-align:left;">ROB/RUB works</h6>
-        <h4 class="fw-bold text-light" style="text-align:left;">{{$totalSatCompletedRkm}}</h4>
->>>>>>> master
+        <h4 class="fw-bold text-light" style="text-align:left;">20</h4>
       </div>
     </div>
   </a>
@@ -290,8 +244,7 @@ canvas {
       </div>
     </div>
   </a>
-</div> -->
-<<<<<<< HEAD
+</div>  -->
  <div class="col-lg-6 mb-4">
           <div class="card shadow rounded-4 p-4 h-100" style="background:#ffffff;border-radius:10px;">
             <h5 class="mb-3"><span style="text-shadow:1px 1px #fff, 2px 2px rgba(0,0,0,0.4);">Progress Distribution</span></h5>
@@ -305,17 +258,12 @@ canvas {
             <canvas id="sectionBarChart" style="max-height:340px;"></canvas>
           </div>
         </div>
-=======
-
-
->>>>>>> master
 
        
 
       </div>
     </div>
 
-<<<<<<< HEAD
     <!-- SLIDE 2: MAP (or any other content) -->
   <div class="carousel-item">
   <div class="row g-4">
@@ -342,12 +290,6 @@ canvas {
     <i class="bi bi-arrow-right-circle"></i>
   </button>
 </div>
-=======
-   
-
-
-  </div>
->>>>>>> master
 
 </div>
   
@@ -430,12 +372,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Ensure carousel instance
   const bsCar = bootstrap.Carousel.getInstance(car) ||
-<<<<<<< HEAD
-                new bootstrap.Carousel(car, { interval: 15000, pause: false, ride: 'carousel' });
-=======
               new bootstrap.Carousel(car, { interval: false, pause: false });
 
->>>>>>> master
 
   // ===== Map init on map slide =====
   let map, inited = false;
@@ -501,7 +439,6 @@ document.addEventListener('DOMContentLoaded', function () {
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
-<<<<<<< HEAD
 <script>
   // ===== BAR CHART (Section Overview) =====
   const ctxSection = document.getElementById("sectionBarChart").getContext("2d");
@@ -594,9 +531,5 @@ document.addEventListener('DOMContentLoaded', function () {
     plugins: [ChartDataLabels] // plugin activate
   });
 </script>
-
-=======
->>>>>>> master
-
 
 @include('includes.footer')

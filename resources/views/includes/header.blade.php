@@ -504,7 +504,11 @@ border-color: #083785;" id="btnNavbarSearch" type="submit"><i class="fas fa-sear
     <li><a class="dropdown-item" href="">Profile</a></li>
     <li><hr class="dropdown-divider" /></li>
     <li>
+<<<<<<< HEAD
       <form id="logout-form" action="" method="POST" style="display: none;">
+=======
+      <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+>>>>>>> master
         @csrf
     </form>
     
@@ -571,6 +575,12 @@ border-color: #083785;" id="btnNavbarSearch" type="submit"><i class="fas fa-sear
   <div class="sb-nav-link-icon"><i class="fas fa-folder-open"></i></div>
   ROB/RUB Works
 </a>
+
+<a class="nav-link {{ request()->routeIs('ni_data') ? 'active' : '' }}" href="{{ route('ni_data') }}">
+  <div class="sb-nav-link-icon"><i class="fas fa-folder-open"></i></div>
+  NIs
+</a>
+
 
 
 
